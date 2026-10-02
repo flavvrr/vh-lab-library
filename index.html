@@ -1,0 +1,1329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Lab Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+  <style>
+/* Verse + Hook brand tokens. Hook Red is reserved for the one action that matters. */
+:root {
+  --black: #0C0C0B;
+  --white: #FCFCFC;
+  --deep: #680000;
+  --hook: #C10808;
+  --tint: #F3D7D7;
+  --line: #0C0C0B;
+  --head: "Special Gothic Expanded One", "Arial Black", sans-serif;
+  --mono: "Space Mono", ui-monospace, monospace;
+  --body: "DM Sans", system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1180px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--white); color: var(--black); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+a { color: inherit; }
+img { max-width: 100%; }
+main { outline: none; }
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  padding: 20px var(--gutter); border-bottom: 1px solid var(--line); background: var(--white); position: sticky; top: 0; z-index: 5; }
+.brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.logo { height: 28px; width: auto; }
+.brand-name { font-family: var(--head); font-size: 15px; letter-spacing: .02em; }
+.nav { display: flex; gap: 22px; flex-wrap: wrap; }
+.nav a { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-decoration: none; padding: 4px 0; }
+.nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.nav .num { opacity: 1; }
+.nav a.active { color: var(--hook); }
+.nav a.active .num::before { content: "/"; }
+
+/* ---------- layout ---------- */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 48px var(--gutter) 80px; }
+.kicker { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--deep); margin: 0 0 12px; }
+h1, h2, h3 { font-family: var(--head); font-weight: 400; text-transform: uppercase; margin: 0; line-height: 1.02; text-wrap: balance; }
+h1 { font-size: clamp(34px, 6vw, 72px); }
+h2 { font-size: clamp(24px, 3.4vw, 40px); }
+h3 { font-size: clamp(16px, 1.6vw, 20px); }
+.lede { font-size: 18px; max-width: 62ch; margin: 18px 0 0; }
+.label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.muted { font-size: 14px; }
+section + section { margin-top: 64px; }
+
+/* ---------- ask box ---------- */
+.ask { margin-top: 36px; border: 1px solid var(--line); padding: 24px; }
+.ask form { display: flex; gap: 0; flex-wrap: wrap; }
+.ask input { flex: 1 1 320px; min-width: 0; font: 400 18px var(--body); padding: 14px 16px; border: 1px solid var(--line); border-right: 0; background: var(--white); color: var(--black); border-radius: 0; }
+.ask input:focus { outline: 2px solid var(--black); outline-offset: -2px; }
+.btn { font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; height: 52px; padding: 0 22px;
+  border: 1px solid var(--line); background: var(--black); color: var(--white); cursor: pointer; border-radius: 0; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn:hover { background: var(--white); color: var(--black); }
+.btn-hook { background: var(--hook); border-color: var(--hook); color: var(--white); }
+.btn-hook:hover { background: var(--white); color: var(--hook); }
+.btn-sm { height: 32px; font-size: 11px; padding: 0 12px; }
+.btn-ghost { background: var(--white); color: var(--black); }
+.btn-ghost:hover { background: var(--black); color: var(--white); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chip { font-family: var(--mono); font-size: 12px; padding: 6px 10px; border: 1px solid var(--line); background: var(--white); cursor: pointer; border-radius: 0; color: var(--black); }
+.chip:hover { background: var(--black); color: var(--white); }
+.answer { margin-top: 20px; }
+.answer:empty { display: none; }
+.match { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); }
+
+/* ---------- cards ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
+.card { border: 1px solid var(--line); padding: 22px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; min-height: 220px; background: var(--white); }
+a.card:hover { background: var(--black); color: var(--white); }
+a.card:hover .status { border-color: var(--white); }
+.card .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.card p { margin: 0; font-size: 15px; }
+.card .go { margin-top: auto; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+.status { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--line); padding: 2px 6px; white-space: nowrap; }
+.status.ready { background: var(--black); color: var(--white); }
+
+/* ---------- how it works strip ---------- */
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); margin-top: 24px; }
+.flow > div { padding: 20px; border-right: 1px solid var(--line); }
+.flow > div:last-child { border-right: 0; }
+.flow .n { font-family: var(--mono); font-weight: 700; color: var(--deep); font-size: 13px; }
+.flow h3 { margin: 8px 0 6px; }
+.flow p { margin: 0; font-size: 14px; }
+
+/* ---------- playbook page ---------- */
+.pb { display: grid; grid-template-columns: 200px 1fr; gap: 48px; }
+.toc { position: sticky; top: 96px; align-self: start; display: flex; flex-direction: column; gap: 10px; }
+.toc a { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-decoration: none; }
+.toc a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.block { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 48px; scroll-margin-top: 96px; }
+.block:first-of-type { margin-top: 32px; }
+.block h2 { margin-bottom: 16px; }
+.qlist { counter-reset: q; list-style: none; padding: 0; margin: 16px 0; }
+.qlist li { counter-increment: q; padding: 12px 0 12px 44px; position: relative; border-bottom: 1px solid var(--line); }
+.qlist li::before { content: counter(q, decimal-leading-zero); position: absolute; left: 0; top: 12px; font-family: var(--mono); font-weight: 700; color: var(--deep); font-size: 13px; }
+.rule { background: var(--black); color: var(--white); padding: 14px 18px; font-size: 15px; margin-top: 16px; }
+.parts { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0; border: 1px solid var(--line); margin-top: 16px; }
+.parts > div { padding: 16px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 -1px -1px 0; }
+.parts p { margin: 6px 0 0; font-size: 14px; }
+.example { margin-top: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+.steps { list-style: none; padding: 0; margin: 16px 0 0; }
+.step { display: grid; grid-template-columns: 64px 1fr 200px; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.step .n { font-family: var(--head); font-size: 28px; line-height: 1; }
+.step h3 { margin-bottom: 6px; }
+.step p { margin: 0; font-size: 15px; }
+.step .meta { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.gate { display: inline-block; background: var(--black); color: var(--white); font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: .06em; padding: 4px 8px; text-transform: uppercase; }
+.out { font-family: var(--mono); font-size: 11px; }
+
+.checks { list-style: none; padding: 0; margin: 16px 0 0; }
+.checks li { padding: 12px 0 12px 32px; position: relative; border-bottom: 1px solid var(--line); }
+.checks li::before { content: ""; position: absolute; left: 0; top: 16px; width: 14px; height: 14px; border: 1px solid var(--line); }
+
+/* ---------- tables ---------- */
+.table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+.table th { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-align: left; background: var(--black); color: var(--white); padding: 10px 12px; }
+.table td { border-bottom: 1px solid var(--line); padding: 12px; vertical-align: top; }
+.table td a { font-weight: 700; }
+.table .own { font-family: var(--mono); font-size: 12px; }
+.table .own.has { color: var(--deep); font-weight: 700; }
+.tabs { display: flex; gap: 0; margin-top: 24px; flex-wrap: wrap; }
+.tab { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; padding: 10px 14px; border: 1px solid var(--line); margin-right: -1px; background: var(--white); cursor: pointer; color: var(--black); border-radius: 0; }
+.tab[aria-selected="true"] { background: var(--black); color: var(--white); }
+.scroll { overflow-x: auto; }
+
+/* ---------- team ---------- */
+.person { border: 1px solid var(--line); padding: 22px; }
+.person h3 { font-size: 22px; }
+.person p { margin: 8px 0 0; font-size: 15px; }
+
+/* ---------- footer ---------- */
+.foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 20px var(--gutter); border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; letter-spacing: .08em; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 820px) {
+  .pb { grid-template-columns: 1fr; gap: 0; }
+  .toc { position: static; flex-direction: row; flex-wrap: wrap; gap: 14px; padding-bottom: 8px; }
+  .step { grid-template-columns: 44px 1fr; }
+  .step .meta { grid-column: 2; }
+  .step .n { font-size: 22px; }
+  .flow { grid-template-columns: 1fr 1fr; }
+  .flow > div:nth-child(2) { border-right: 0; }
+  .flow > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .ask input { border-right: 1px solid var(--line); }
+  .ask form .btn { width: 100%; justify-content: center; }
+  .nav { gap: 14px; }
+}
+@media (max-width: 480px) {
+  .flow { grid-template-columns: 1fr; }
+  .flow > div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .flow > div:last-child { border-bottom: 0; }
+}
+.ask + section { margin-top: 64px; }
+
+/* =====================================================================
+   SOFTER LAYOUT: shadows instead of hard outlines, bands between sections
+   ===================================================================== */
+:root {
+  --soft: #F2F2F0;
+  --hair: rgba(12, 12, 11, .12);
+  --shadow: 0 1px 2px rgba(12, 12, 11, .06), 0 8px 24px rgba(12, 12, 11, .07);
+  --shadow-up: 0 2px 4px rgba(12, 12, 11, .08), 0 16px 36px rgba(12, 12, 11, .12);
+}
+.top { border-bottom: 0; box-shadow: 0 1px 0 var(--hair), 0 6px 18px rgba(12, 12, 11, .04); }
+.foot { border-top: 1px solid var(--hair); }
+section + section, .ask + section { margin-top: 0; }
+.wrap > section { padding: 64px 0; }
+
+/* full-width soft band to break the page up */
+.band { background: var(--soft); box-shadow: 0 0 0 100vmax var(--soft); clip-path: inset(0 -100vmax); }
+
+/* ask box */
+.ask { border: 0; box-shadow: var(--shadow); padding: 28px; background: var(--white); margin-bottom: 8px; }
+.match { border-top: 1px solid var(--hair); }
+
+/* cards */
+.grid { gap: 20px; }
+.card { border: 0; box-shadow: var(--shadow); transition: box-shadow .2s ease, transform .2s ease; }
+a.card:hover { background: var(--white); color: var(--black); box-shadow: var(--shadow-up); transform: translateY(-2px); }
+a.card:hover h3 { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+a.card:hover .status { border-color: var(--line); }
+
+/* how it works: inverted band of four */
+.flow { border: 0; background: var(--black); color: var(--white); gap: 0; box-shadow: var(--shadow); }
+.flow > div { border-right: 1px solid rgba(252, 252, 252, .18); padding: 26px 22px; }
+.flow .n { color: var(--white); opacity: .7; }
+
+/* playbook pages */
+.block { border-top: 0; margin-top: 72px; padding-top: 0; }
+.block:first-of-type { margin-top: 40px; }
+#steps { background: var(--soft); padding: 32px; }
+#steps .step { background: var(--white); border-bottom: 0; padding: 22px; margin-bottom: 12px; box-shadow: var(--shadow); }
+#steps .step:last-child { margin-bottom: 0; }
+.qlist li, .checks li { border-bottom: 1px solid var(--hair); }
+.parts { border: 0; gap: 14px; }
+.parts > div { border: 0; margin: 0; background: var(--white); box-shadow: var(--shadow); }
+.rule { box-shadow: var(--shadow); }
+
+/* tables */
+.table { box-shadow: var(--shadow); background: var(--white); }
+.table td { border-bottom: 1px solid var(--hair); }
+.table tr:last-child td { border-bottom: 0; }
+
+/* tabs, team */
+.tab { border-color: var(--hair); }
+.person { border: 0; box-shadow: var(--shadow); background: var(--white); }
+
+@media (max-width: 820px) {
+  .wrap > section { padding: 48px 0; }
+  #steps { padding: 16px; }
+  #steps .step { padding: 16px; }
+  .flow > div { border-right: 0; border-bottom: 1px solid rgba(252, 252, 252, .18); }
+  .flow > div:nth-child(-n+2) { border-bottom: 1px solid rgba(252, 252, 252, .18); }
+}
+.chip { border-color: var(--hair); background: var(--soft); }
+.chip:hover { background: var(--black); border-color: var(--black); }
+.status { border-color: var(--hair); }
+
+/* =====================================================================
+   ALBUM COVERS
+   ===================================================================== */
+.albums { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 40px 28px; margin-top: 28px; }
+.album { text-decoration: none; color: var(--black); display: block; }
+.album:focus-visible { outline: 2px solid var(--black); outline-offset: 6px; }
+.sleeve { position: relative; margin-right: 18%; }
+.album-meta { margin-top: 16px; padding-right: 18%; }
+.album-meta h3 { font-size: 14px; }
+.album-meta p { margin: 6px 0 0; font-size: 14px; }
+.album:hover .album-meta h3 { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+
+/* the record peeking out of the sleeve */
+.disc { position: absolute; top: 4%; right: 0; width: 92%; aspect-ratio: 1; border-radius: 50%; z-index: 0;
+  background:
+    radial-gradient(circle, var(--white) 0 3%, var(--deep) 3.2% 17%, transparent 17.3%),
+    repeating-radial-gradient(circle, #1b1b1a 0 1px, #0c0c0b 1px 3px);
+  box-shadow: 0 6px 18px rgba(12, 12, 11, .25);
+  transform: translateX(10%); transition: transform .45s cubic-bezier(.2, .7, .2, 1); }
+.album:hover .disc, .album:focus-visible .disc { transform: translateX(24%) rotate(25deg); }
+
+.cover { position: relative; z-index: 1; aspect-ratio: 1; overflow: hidden; container-type: inline-size;
+  box-shadow: 0 2px 4px rgba(12, 12, 11, .1), 0 14px 30px rgba(12, 12, 11, .18);
+  transition: transform .3s ease; display: block; }
+.album:hover .cover { transform: translateY(-3px); }
+.cover > span { position: absolute; z-index: 2; }
+.cv-top, .cv-foot { left: 7cqw; right: 7cqw; display: flex; justify-content: space-between; font-family: var(--mono); font-weight: 700; font-size: 4.2cqw; letter-spacing: .1em; }
+.cv-top { top: 6cqw; }
+.cv-foot { bottom: 6cqw; }
+.cv-title { left: 7cqw; right: 7cqw; bottom: 15cqw; font-family: var(--head); line-height: .92; letter-spacing: -.01em; }
+.cv-sticker { top: 15cqw; right: 6cqw; width: 19cqw; height: 19cqw; border-radius: 50%; display: grid; place-items: center; text-align: center;
+  font-family: var(--mono); font-weight: 700; font-size: 3.3cqw; letter-spacing: .06em; line-height: 1.1; padding: 2cqw; transform: rotate(-12deg); }
+.cv-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: grayscale(1) contrast(.9); }
+
+/* style: crop (white, giant cropped number) */
+.cv-crop { background: var(--white); color: var(--black); }
+.cv-num { position: absolute; z-index: 1; right: -6cqw; top: -14cqw; font-family: var(--head); font-size: 86cqw; line-height: 1; color: transparent; -webkit-text-stroke: .5cqw var(--black); }
+.cv-crop .cv-sticker { background: var(--black); color: var(--white); }
+
+/* style: grooves (black, off-center rings) */
+.cv-grooves { background:
+    repeating-radial-gradient(circle at 78% 22%, rgba(252, 252, 252, .16) 0 .45cqw, transparent .45cqw 2.6cqw), var(--black);
+  color: var(--white); }
+.cv-grooves .cv-sticker { background: var(--white); color: var(--black); }
+
+/* style: deep (Deep Red with halftone and grain) */
+.cv-deep { color: var(--white); background:
+    radial-gradient(circle, rgba(252, 252, 252, .2) 26%, transparent 29%) 0 0 / 10px 10px,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E"),
+    var(--deep); }
+.cv-deep .cv-sticker { background: var(--white); color: var(--deep); }
+
+/* style: bars (white, equalizer) */
+.cv-eq { position: absolute; z-index: 1; left: 7cqw; right: 7cqw; top: 14cqw; height: 34cqw; display: flex; align-items: flex-end; gap: 2.2cqw; }
+.cv-eq i { flex: 1; background: var(--black); display: block; }
+.cv-eq ~ .cv-title { color: var(--black); }
+.cover.cv-bars { background: var(--white); color: var(--black); }
+.cover.cv-bars .cv-sticker { background: var(--deep); color: var(--white); top: 52cqw; right: 6cqw; }
+.cover.cv-bars .cv-eq { top: 14cqw; }
+
+/* a photo under any cover gets darkened so type stays readable */
+.cover:has(.cv-img) { color: var(--white); }
+.cover:has(.cv-img)::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(12,12,11,.15), rgba(12,12,11,.65)); }
+
+/* playbook page header with the cover */
+.pb-hero { display: grid; grid-template-columns: 220px 1fr; gap: 36px; align-items: end; }
+.pb-cover .cover { width: 220px; }
+@media (max-width: 640px) {
+  .pb-hero { grid-template-columns: 1fr; gap: 20px; }
+  .pb-cover .cover { width: 180px; }
+  .albums { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px 16px; }
+  .album-meta h3 { font-size: 12px; }
+  .sleeve { margin-right: 12%; }
+  .album-meta { padding-right: 0; }
+  .album-meta p { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .disc, .cover { transition: none; } }
+
+/* style: curve (white, the feeling line) */
+.cover.cv-curve { background: var(--white); color: var(--black); }
+.cv-curve svg, svg.cv-curve { position: absolute; z-index: 1; left: 7cqw; top: 16cqw; width: 62cqw; height: 29cqw; overflow: visible; }
+svg.cv-curve polyline { fill: none; stroke: var(--black); stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-width: 3px; }
+svg.cv-curve .base { stroke: var(--black); stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+svg.cv-curve circle { fill: var(--black); }
+svg.cv-curve circle.lo { fill: var(--deep); }
+.cover.cv-curve .cv-sticker { background: var(--black); color: var(--white); }
+
+.match > div { flex: 1 1 320px; min-width: 0; }
+
+/* resources page tools */
+.res-tools { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 24px; }
+.res-tools .tabs { margin-top: 0; }
+.res-search { flex: 0 1 360px; min-width: 0; font: 400 16px var(--body); padding: 10px 14px; border: 1px solid var(--hair); background: var(--white); color: var(--black); border-radius: 0; box-shadow: var(--shadow); }
+.res-search:focus { outline: 2px solid var(--black); outline-offset: 0; }
+.res-jump { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 20px; }
+.res-jump a { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-decoration: none; }
+.res-jump a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.table .status { font-size: 9px; padding: 1px 5px; margin-left: 6px; vertical-align: middle; }
+
+/* =====================================================================
+   MORE COVER STYLES
+   ===================================================================== */
+.cover.tone-black { background: var(--black); color: var(--white); }
+.cover.tone-white { background: var(--white); color: var(--black); }
+.cover.tone-deep { background: var(--deep); color: var(--white); }
+.cover.tone-black .cv-sticker, .cover.tone-deep .cv-sticker { background: var(--white); color: var(--black); }
+.cover.tone-white .cv-sticker { background: var(--black); color: var(--white); }
+
+/* type: one giant outlined word */
+.cv-word { position: absolute; z-index: 1; left: 6cqw; top: 13cqw; font-family: var(--head); line-height: .85; letter-spacing: -.02em; color: transparent; -webkit-text-stroke: .5cqw var(--white); white-space: nowrap; }
+.cover.tone-white .cv-word { -webkit-text-stroke-color: var(--black); }
+.cover.tone-deep .cv-word { color: rgba(252, 252, 252, .14); -webkit-text-stroke-color: var(--white); }
+
+/* quote: a giant open quote mark */
+.cv-q { position: absolute; z-index: 1; left: 5cqw; top: 13cqw; font-family: var(--head); font-size: 64cqw; line-height: .62; height: 34cqw; overflow: hidden; }
+.cover.tone-white .cv-q { color: var(--deep); }
+.cover.tone-deep .cv-q { color: rgba(252, 252, 252, .9); }
+
+/* rings: a target, Deep Red center */
+.cover.cv-rings { background: var(--white); color: var(--black); }
+.cv-target { position: absolute; z-index: 1; left: 50%; top: 38%; width: 120cqw; height: 120cqw; transform: translate(-50%, -50%); border-radius: 50%;
+  background: repeating-radial-gradient(circle, transparent 0 4.2cqw, var(--black) 4.2cqw 5.4cqw); -webkit-mask: radial-gradient(circle, #000 0 36%, transparent 37%); mask: radial-gradient(circle, #000 0 36%, transparent 37%); }
+.cv-bull { position: absolute; z-index: 2; left: 50%; top: 38%; width: 7cqw; height: 7cqw; border-radius: 50%; background: var(--deep); transform: translate(-50%, -50%); }
+.cover.cv-rings .cv-title { background: var(--white); padding: 1.5cqw 2cqw 1cqw 0; }
+.cover.cv-rings .cv-sticker { background: var(--deep); color: var(--white); }
+
+/* split: before / after, type inverts across the line */
+.cover.cv-split { background: var(--white); color: var(--white); }
+.cv-half { position: absolute; z-index: 0; left: 0; top: 0; bottom: 0; width: 50%; background: var(--black); }
+.cover.cv-split > span:not(.cv-half):not(.cv-sticker) { mix-blend-mode: difference; }
+.cv-ba { font-family: var(--mono); font-weight: 700; font-size: 4cqw; letter-spacing: .12em; top: 40cqw; }
+.cv-b { left: 7cqw; } .cv-a { left: 57cqw; }
+.cover.cv-split .cv-sticker { background: var(--deep); color: var(--white); }
+
+/* grid: graph paper with one Deep Red square */
+.cover.cv-grid { color: var(--white); background:
+  linear-gradient(rgba(252,252,252,.18) 1px, transparent 1px) 0 0 / 16px 16px,
+  linear-gradient(90deg, rgba(252,252,252,.18) 1px, transparent 1px) 0 0 / 16px 16px, var(--black); }
+.cover.cv-grid::before { content: ""; position: absolute; z-index: 1; left: 48%; top: 30%; width: 16px; height: 16px; background: var(--deep); outline: 2px solid var(--white); }
+.cover.cv-grid .cv-sticker { background: var(--white); color: var(--black); }
+
+/* dots: data points rising */
+.cover.cv-dots { background: var(--white); color: var(--black); }
+.cv-pts { position: absolute; z-index: 1; left: 7cqw; right: 7cqw; top: 12cqw; height: 40cqw; }
+.cv-pts i { position: absolute; width: 4.6cqw; height: 4.6cqw; border-radius: 50%; background: var(--black); transform: translate(-50%, -50%); }
+.cv-pts i.hi { background: var(--deep); width: 7cqw; height: 7cqw; }
+.cover.cv-dots .cv-sticker { background: var(--black); color: var(--white); top: auto; bottom: 34cqw; }
+
+/* the "see every album" card */
+.cover.cv-more { background: var(--soft); color: var(--black); box-shadow: inset 0 0 0 1px var(--hair), 0 2px 4px rgba(12,12,11,.06); }
+.cv-more-n { left: 7cqw; top: 22cqw; font-family: var(--head); font-size: 34cqw; line-height: 1; }
+
+/* phases on the Playbooks page */
+.phase { padding: 40px 0 8px; }
+.phase + .phase { border-top: 1px solid var(--hair); }
+html, body { overflow-x: clip; }
+
+</style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="#/">
+      
+      <span class="brand-name">THE LAB LIBRARY</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#/" data-route="home"><span class="num">01</span> START</a>
+      <a href="#/playbooks" data-route="playbooks"><span class="num">02</span> PLAYBOOKS</a>
+      <a href="#/resources" data-route="resources"><span class="num">03</span> RESOURCES</a>
+      <a href="#/library" data-route="library"><span class="num">04</span> LIBRARY</a>
+      <a href="#/team" data-route="team"><span class="num">05</span> TEAM</a>
+    </nav>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="foot">
+    <span>VERSE + HOOK / THE LAB</span>
+    <span id="updated"></span>
+  </footer>
+
+  <script>
+/* =====================================================================
+   THE LAB LIBRARY / HUB CONTENT
+   This is the only file most people need to edit.
+   Add a playbook, a resource, or a library item by copying an entry
+   that already exists and changing the words. Save, commit, done.
+   ===================================================================== */
+
+window.HUB = {
+  updated: "October 1, 2026",
+  editor: "Tierra",
+
+  /* ---------------------------------------------------------------
+     TEAM. "askMe" is what someone should come to you for.
+     --------------------------------------------------------------- */
+  team: [
+    { name: "Tierra", role: "Partner / CSO. Leads The Lab.", askMe: "Approving the ask, strategy crits, final sign-off on anything client-facing.", contact: "" },
+    { name: "Jay", role: "CEO and Partner", askMe: "Brand Foundation (Topline, Hook, Verses). Reviews Lab progress with Tierra.", contact: "" },
+    { name: "Kyle", role: "Head of Creative", askMe: "Handing work to creative, creative crits, and co-leading client workshops.", contact: "" },
+    { name: "Joe", role: "Head of Project Management", askMe: "Timelines, kickoff dates, scheduling, and starting materials like competitive sets.", contact: "" },
+    { name: "Matt", role: "Strategy Coordinator", askMe: "Competitive research and source logs.", contact: "" }
+  ],
+
+  /* ---------------------------------------------------------------
+     COVERS: every playbook gets an album cover.
+     cover.style: "crop" | "curve" | "grooves" | "deep" | "bars" | "rings" | "type" | "quote" | "split" | "grid" | "dots"
+     cover.word: the giant word on "type" covers. cover.tone: "black" | "white" | "deep" for "type" and "quote".
+     cover.phase: which group the album sits in on the Playbooks page. vol sets the track order.
+     cover.title: use \n for line breaks. Keep at least two words on a line when you can.
+     cover.image: optional path to a photo (e.g. "assets/covers/persona.jpg"); it sits under the type with grain.
+     --------------------------------------------------------------- */
+
+  /* ---------------------------------------------------------------
+     PLAYBOOKS. One per kind of ask.
+     status: "Ready" | "Draft" | "Coming next"
+     keywords power the "What are you being asked to do?" box.
+     --------------------------------------------------------------- */
+  playbooks: [
+    {
+      id: "hook",
+      cover: { style: "rings", title: "FIND\nTHE HOOK", vol: "12", image: "", phase: "Making meaning" },
+      title: "Find the Hook",
+      status: "Draft",
+      kind: "Brand",
+      oneLine: "Go from research to a Topline, a Hook people repeat in their own words, and the Verses that make it true.",
+      keywords: ["hook", "find the hook", "topline", "verses", "positioning", "big idea", "brand idea", "platform", "brand foundation", "what we stand for", "tagline"],
+      ask: {
+        plain: "You're being asked to find the one idea people will remember about this brand and repeat in their own words. A fan is someone who plays it back. The Topline sets the standard, the Hook is the idea, and the Verses are the proof. You need all three, and the Hook has to pass four tests: simple, distinct, ownable, felt.",
+        intake: [
+          "What decision is this for: a repositioning, a campaign, a product, or a brand foundation?",
+          "What research do we have? A persona, a journey, a competitive analysis, a Source Log.",
+          "Is there a Topline already, or are we writing it too?",
+          "Who signs off on the client side, and how will they see it: a workshop or a deck?",
+          "When does creative need it?"
+        ],
+        rule: "Don't write Hooks until the persona and competitive work exist, even as drafts. A Hook without evidence is a tagline."
+      },
+      outcome: {
+        summary: "A Hook deck built from the Find the Hook template, ready for a client room and a creative kickoff.",
+        parts: [
+          ["The truth wall", "Ten to twenty truths from the research, each tagged known or hypothesis."],
+          ["The Topline", "What the brand stands for in one line, true today."],
+          ["The Hook", "One line, on the one Hook Red slide."],
+          ["The four tests", "Evidence that it's simple, distinct, ownable, and felt."],
+          ["Said back", "How a fan would say it to a friend, in their words."],
+          ["The Verses", "Three to five proofs: what exists and what we'll build."],
+          ["Left on the floor", "The candidates we cut, and why."],
+          ["For creative", "Say it, show it, stop it."]
+        ],
+        tagRule: "If a Hook has no Verses, it's out. Proof first.",
+        example: null
+      },
+      steps: [
+        { title: "Gather the evidence", time: "Half a day", do: "Pull the persona, journey, competitive analysis, and Source Log. Write every truth on its own card: tensions, verbatims, gaps nobody owns.", output: "Truth wall, 10 to 20 cards", gate: "" },
+        { title: "Write the Topline", time: "1 hour", do: "What the brand stands for, in one line, true today. Read it next to the competitors' lines. If it could be theirs, keep going.", output: "Topline draft", gate: "Tierra approves" },
+        { title: "Write the candidates", time: "1 day", do: "Write at least fifteen Hooks in the words people actually use. Work from tensions, from verbatims, and from the openings in the competitive work.", output: "15+ candidates", gate: "" },
+        { title: "Run the four tests", time: "2 hours", do: "Score each candidate 1 to 3 on simple, distinct, ownable, and felt, then run the fan test: could someone say it to a friend in their own words? Cut to three.", output: "Scorecard, 3 finalists", gate: "Crit with Tierra, Jay, and Kyle" },
+        { title: "Find the Verses", time: "1 day", do: "For each finalist, list the proof that exists today and the proof we'd build. Cut any finalist without real proof.", output: "Verses per finalist", gate: "" },
+        { title: "Say it out loud to real people", time: "2 to 3 days", do: "Put the finalists in front of five to eight real people, or test them in the client workshop. Listen for the words they repeat back, and write them down exactly.", output: "Verbatims per finalist", gate: "" },
+        { title: "Pick it and build the deck", time: "1 day", do: "Choose the Hook and fill the template, including what you cut and why.", output: "Hook deck", gate: "Tierra and Jay sign off, then the client" },
+        { title: "Hand it to creative", time: "1 hour", do: "Run the creative kickoff with Kyle. File the deck in Home Base and add it to the Library.", output: "Library entry", gate: "" }
+      ],
+      startHere: [
+        "Check that a persona and a competitive analysis exist. If not, start there.",
+        "Download the Find the Hook template.",
+        "Read the V+H Brand Foundation draft from Jay to see the Topline, Hook, and Verses in our own words."
+      ],
+      learnFree: ["sfs196", "sfs175", "sfs107", "sfs108", "listening", "sfs165", "sfs166", "sfs190"],
+      learnPaid: ["sfs8"],
+      templates: [
+        { name: "Find the Hook Template", file: "templates/VH_Lab_Find_The_Hook_Template.pptx", what: "Truth wall, Topline, candidate scorecard, finalists, the Hook, the four tests, Verses, and what we cut. Works in PowerPoint, Keynote, and Google Slides." }
+      ]
+    },
+    {
+      id: "rfp",
+      cover: { style: "type", title: "ANSWER\nAN RFP", vol: "01", word: "RFP", tone: "black", image: "", phase: "Getting the work" },
+      title: "Answer an RFP",
+      status: "Coming next",
+      kind: "Pitch",
+      oneLine: "Turn a request for proposal into a response that sounds like Verse + Hook and wins on the thinking.",
+      keywords: ["rfp", "proposal", "pitch", "new business", "bid", "response", "procurement"],
+      ask: { plain: "Coming next. It will start with what we learned from the Oakland University and SMART responses.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: [], learnPaid: [], templates: []
+    },
+    {
+      id: "brief",
+      cover: { style: "split", title: "WRITE\nTHE BRIEF", vol: "02", image: "", phase: "Getting the work" },
+      title: "Write the brief",
+      status: "Coming next",
+      kind: "Brief",
+      oneLine: "Turn a client ask into one page creative can run with, built on the Topline, the Hook, and the Verses.",
+      keywords: ["brief", "creative brief", "strategy brief", "one pager", "ask", "kickoff brief"],
+      ask: { plain: "Coming next. One page, one problem, one Hook to chase.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: [], learnPaid: [], templates: []
+    },
+    {
+      id: "conversations",
+      cover: { style: "quote", title: "RUN THE\nCONVERSATIONS", vol: "04", tone: "deep", image: "", phase: "Understanding people" },
+      title: "Run member conversations",
+      status: "Coming next",
+      kind: "Research",
+      oneLine: "Recruit real people, talk with them, and capture what they say word for word, with consent.",
+      keywords: ["interview", "interviews", "conversations", "talk to customers", "member conversations", "qualitative", "ethnography", "focus group", "recruit"],
+      ask: { plain: "Coming next. Recruiting, the guide, consent, and how to capture verbatims every other playbook can use.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["sfs188", "designkit"], learnPaid: [], templates: []
+    },
+    {
+      id: "survey",
+      cover: { style: "type", title: "RUN A QUICK\nSURVEY", vol: "05", word: "?", tone: "deep", image: "", phase: "Understanding people" },
+      title: "Run a quick survey",
+      status: "Coming next",
+      kind: "Research",
+      oneLine: "Know when a survey is the right tool, write questions that don't lead, and field it fast.",
+      keywords: ["survey", "poll", "questionnaire", "quant", "quantitative", "sample"],
+      ask: { plain: "Coming next. When to survey, how to write it, and which tool fits the budget.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["sfs113", "sfs183", "sfs122"], learnPaid: [], templates: []
+    },
+    {
+      id: "signals",
+      cover: { style: "grooves", title: "SCAN THE\nSIGNALS", vol: "06", image: "", phase: "Understanding people" },
+      title: "Scan cultural signals",
+      status: "Coming next",
+      kind: "Culture",
+      oneLine: "A repeatable sweep through trend and listening sources that ends with three signals worth acting on.",
+      keywords: ["trends", "trend", "signals", "cultural signals", "culture", "what's happening", "zeitgeist", "scan"],
+      ask: { plain: "Coming next. A two-hour sweep, a signal card, and a rule for what counts.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["trends", "sfs96", "sfs95", "sfs101", "sfs36", "listening"], learnPaid: [], templates: []
+    },
+    {
+      id: "audit",
+      cover: { style: "grid", title: "AUDIT\nTHE BRAND", vol: "10", image: "", phase: "Making meaning" },
+      title: "Audit the brand",
+      status: "Coming next",
+      kind: "Brand",
+      oneLine: "See how the client actually shows up today: site, social, branches, staff language, and what people say back.",
+      keywords: ["audit", "brand audit", "touchpoints", "how we show up", "current state", "brand review"],
+      ask: { plain: "Coming next. The partner to the competitive analysis, pointed at the client.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["sfs202", "sfs65", "listening"], learnPaid: [], templates: []
+    },
+    {
+      id: "insight",
+      cover: { style: "quote", title: "WRITE AN\nINSIGHT", vol: "11", tone: "white", image: "", phase: "Making meaning" },
+      title: "Write an insight",
+      status: "Coming next",
+      kind: "Craft",
+      oneLine: "Turn a pile of findings into one line that changes what the client does.",
+      keywords: ["insight", "insights", "finding", "findings", "so what", "synthesis"],
+      ask: { plain: "Coming next. What an insight is at V+H, what it isn't, and how to test one.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["sfs196", "sfs175"], learnPaid: [], templates: []
+    },
+    {
+      id: "handoff",
+      cover: { style: "type", title: "HAND OFF TO\nCREATIVE", vol: "14", word: "PASS", tone: "black", image: "", phase: "In the room" },
+      title: "Hand off to creative",
+      status: "Coming next",
+      kind: "Creative",
+      oneLine: "Run the kickoff, give creative what they need, and keep strategy in the work after the handoff.",
+      keywords: ["handoff", "hand off", "creative kickoff", "kickoff", "creative team", "brief creative"],
+      ask: { plain: "Coming next. Built with Kyle around how the creative team actually works.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: [], learnPaid: [], templates: []
+    },
+    {
+      id: "casestudy",
+      cover: { style: "split", title: "BUILD A\nCASE STUDY", vol: "15", image: "", phase: "Proving it" },
+      title: "Build a case study",
+      status: "Coming next",
+      kind: "Proof",
+      oneLine: "Turn finished work into a case study that sells the next one: stats, segments, persona, before and after.",
+      keywords: ["case study", "case studies", "portfolio", "results", "proof", "new business", "credentials"],
+      ask: { plain: "Coming next. Modeled on the COGNIX case study setup, as the start of the V+H case study engine.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: [], learnPaid: [], templates: []
+    },
+    {
+      id: "readout",
+      cover: { style: "dots", title: "READ OUT\nTHE CAMPAIGN", vol: "16", image: "", phase: "Proving it" },
+      title: "Read out a campaign",
+      status: "Coming next",
+      kind: "Proof",
+      oneLine: "What moved, what didn't, and what we'd tell the next client.",
+      keywords: ["readout", "results", "campaign results", "post campaign", "measurement", "report", "performance", "learnings"],
+      ask: { plain: "Coming next. Numbers, what people said, and the one thing we'd change.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: [], learnPaid: [], templates: []
+    },
+    {
+      id: "persona",
+      cover: { style: "crop", title: "BUILD\nA PERSONA", vol: "07", phase: "Understanding people", image: "" },
+      title: "Build a persona",
+      status: "Ready",
+      kind: "Audience",
+      oneLine: "A profile of one real kind of person the client needs to turn into a fan, built from evidence and written so creative can talk to them.",
+      keywords: ["persona", "personas", "audience", "profile", "customer profile", "member profile", "segment", "target", "who are we talking to", "consumer", "customer", "user"],
+
+      ask: {
+        plain: "When someone says \"build a persona,\" they're asking: who are we talking to, what's going on in their life when they need this brand, and what would make them remember us and play it back? A persona answers that for one kind of person. Most projects need one to three.",
+        intake: [
+          "Who asked, and what decision will this persona help them make?",
+          "Which product, service, or moment is it about?",
+          "How many personas, and is there a lead one?",
+          "Where will it be seen: internal only, a client deck, or a workshop? And by when?",
+          "What do we already have: client data, past research, call notes, a competitive set?"
+        ],
+        rule: "Write the answers in one paragraph and get Tierra's thumbs up before any research starts."
+      },
+
+      outcome: {
+        summary: "A persona deck built from the Persona Template. One profile spread per persona, plus a side-by-side and a slide on what still needs proving.",
+        parts: [
+          ["Name + In their words", "What we call them, and one line in their voice."],
+          ["Snapshot + Photo", "Life stage, place, relationship to the brand. A real, unposed photo."],
+          ["The moment", "What sends them looking for this kind of product."],
+          ["Their world", "Money, time, family, community. Whatever shapes the decision."],
+          ["What they believe", "Their mental model, and where it's wrong."],
+          ["What's in the way", "Fear, jargon, cost, access, trust."],
+          ["What the brand does for them", "The one or two things that matter to this person."],
+          ["Who's courting them", "Which rival already talks to them, and how."],
+          ["Verbatim wall", "Six scraps in their actual words, with source and date."],
+          ["Say", "The one line creative should build from."]
+        ],
+        tagRule: "Every claim is tagged KNOWN (we have a source) or HYPOTHESIS (we believe it and need to prove it).",
+        example: { label: "Example: Vibe HELOC customer profiles (The New Owner)", file: "", where: "Vibe Home Base folder in Drive. Client work stays off this site." }
+      },
+
+      steps: [
+        { title: "Take the brief", time: "30 min", do: "Answer the five intake questions. Turn them into a one-paragraph ask.", output: "The ask, in one paragraph", gate: "Tierra approves the ask" },
+        { title: "Start with what we have", time: "Half a day", do: "Pull client data, past decks, call notes, the competitive set, and anything in this library. Send the client a data request early, because it's the slowest thing to come back.", output: "A list of what's already known", gate: "" },
+        { title: "Learn the community", time: "3 to 5 days", do: "Work through Learn More below: public data, local voices, social listening, 5 to 8 short conversations, and a field visit with photos. Collect verbatims word for word.", output: "Rows in the Source Log", gate: "" },
+        { title: "Aggregate", time: "Ongoing", do: "Everything goes in the Source Log: one row per fact, quote, photo, or observation. Tag each row with its profile block and KNOWN or HYPOTHESIS.", output: "A full Source Log", gate: "" },
+        { title: "Distill", time: "1 day", do: "On the Distill tab, write the pattern for each block. A pattern needs three or more sources. Pick the strongest verbatim, name the persona after what they do, and write the Say line.", output: "A filled Distill tab", gate: "30-min crit with Tierra, plus Jay or Kyle" },
+        { title: "Build", time: "1 to 2 days", do: "Fill the Persona Template. Every placeholder is labeled TEXT, PHOTO, VISUAL, VERBATIM, or DIAGRAM. Delete any you don't use rather than leaving them empty.", output: "Persona deck, draft", gate: "Tierra reviews before it goes out" },
+        { title: "Validate", time: "1 hour", do: "Walk the client through it, in a review or a workshop. Ask: who do you know like this? Mark what they confirm and what they kill.", output: "Confirmed / killed notes", gate: "Client confirms" },
+        { title: "File it", time: "15 min", do: "Save the final deck and Source Log to the client's Home Base folder in Drive. Add it to the Library here, with one note on what you'd do differently.", output: "A library entry", gate: "" }
+      ],
+
+      startHere: [
+        "Download the Persona Source Log and the Persona Template from Templates below.",
+        "Open the example (Vibe HELOC profiles) so you know what good looks like.",
+        "Book your Step 1 check-in with Tierra before you research anything."
+      ],
+
+      learnFree: ["census", "censusreporter", "pew", "shed", "fdic", "d3", "semcog", "outlier", "bridge", "freep", "sfs7", "sfs122", "trends", "sfs69", "sfs75", "listening", "sfs165", "sfs166", "sfs190", "nng", "designkit"],
+      learnPaid: ["adage", "linkedin", "perplexity", "statista", "gwi", "mintel", "mri", "morningconsult", "yougov", "brandwatch"],
+
+      templates: [
+        { name: "Persona Template", file: "templates/VH_Lab_Persona_Template.pptx", what: "Profile spreads with TEXT, PHOTO, VISUAL, VERBATIM, and DIAGRAM placeholders. Works in PowerPoint, Keynote, and Google Slides." },
+        { name: "Persona Source Log", file: "templates/VH_Lab_Persona_Source_Log.xlsx", what: "Aggregate everything here, then distill it on the second tab. Upload it to Google Sheets to share it." }
+      ]
+    },
+
+    {
+      id: "journey",
+      cover: { style: "curve", title: "MAP THE\nJOURNEY", vol: "08", phase: "Understanding people", image: "" },
+      title: "Map the journey",
+      status: "Draft",
+      kind: "Audience",
+      oneLine: "Follow one persona from the moment life happens to the moment they play the brand back to someone, and find where the brand wins or loses them.",
+      keywords: ["journey", "journey map", "experience map", "customer journey", "consumer journey", "member journey", "touchpoints", "funnel", "path", "experience"],
+      ask: {
+        plain: "A journey map shows the room where a real person gets stuck, where the competition gets to them, and the one moment the brand has to win. Build it on top of a persona.",
+        intake: [
+          "Which persona? A journey map without a persona is a guess.",
+          "Which product or moment does the journey follow?",
+          "Is it for a workshop wall, a client deck, or both?",
+          "What do we already know about where people drop off? Ask for client data."
+        ],
+        rule: "One journey per persona. Get the persona approved before you map it."
+      },
+      outcome: {
+        summary: "A journey deck built from the Journey Map Template, plus a wall poster for workshops.",
+        parts: [
+          ["Six stages", "The moment, first listen, side by side, commit, on repeat, play it back."],
+          ["Seven lanes", "Doing, thinking, feeling, where, who else, what gets in the way, the opening."],
+          ["The feeling line", "A score from -2 to +2 at each stage. The low point is Deep Red."],
+          ["The moment that matters most", "One stage, one Hook Red slide."],
+          ["Moments we can win", "What we do at each moment, who owns it, and how we'll know."]
+        ],
+        tagRule: "Every cell is a hypothesis unless it's marked KNOWN.",
+        example: { label: "Example: Vibe HELOC, The New Owner journey", file: "", where: "Vibe Home Base folder in Drive. Client work stays off this site." }
+      },
+      steps: [
+        { title: "Pick the persona", time: "15 min", do: "Start from an approved persona and its Source Log. Pick the product or moment to follow.", output: "Persona + moment", gate: "Tierra approves" },
+        { title: "Sketch the six stages", time: "1 hour", do: "Fill IN ONE LINE for each stage first. Rename a stage only if the category truly needs it.", output: "Six lines", gate: "" },
+        { title: "Fill the lanes", time: "1 day", do: "Work lane by lane across all six stages. Thinking is always a verbatim from the Source Log. Mark anything with a source KNOWN.", output: "Full grid", gate: "" },
+        { title: "Score the feeling", time: "30 min", do: "Score each stage from -2 to +2 based on what people said and did. Not on what we hope.", output: "Feeling line", gate: "" },
+        { title: "Call the moment", time: "1 hour", do: "Pick the one stage that decides everything and write it as one line. Fill Moments We Can Win.", output: "Hook Red slide + opportunity table", gate: "Crit with Tierra, plus Jay or Kyle" },
+        { title: "Print the wall", time: "30 min", do: "For workshops, fill the poster version and print it at 48 by 24 inches. Bring sticky notes so the client can add to it.", output: "Wall poster", gate: "" },
+        { title: "Validate and file", time: "1 hour", do: "Walk the client through it, mark what they confirm, and file the deck and poster in Home Base.", output: "Library entry", gate: "Client confirms" }
+      ],
+      startHere: [
+        "Make sure the persona exists. If not, run Build a Persona first.",
+        "Download the Journey Map Template and the poster.",
+        "Open the Vibe New Owner example in Drive."
+      ],
+      learnFree: ["sfs69", "sfs190", "sfs158", "listening", "trends", "nng", "designkit"],
+      learnPaid: ["brandwatch", "perplexity"],
+      templates: [
+        { name: "Journey Map Template", file: "templates/VH_Lab_Journey_Map_Template.pptx", what: "Six stages, seven lanes, the feeling line, and one Hook Red moment. Works in PowerPoint, Keynote, and Google Slides." },
+        { name: "Journey Map Poster", file: "templates/VH_Lab_Journey_Map_Poster_Template.pdf", what: "A 48 by 24 inch wall version for workshops. Print it and write on it." }
+      ]
+    },
+    {
+      id: "competitive",
+      cover: { style: "type", word: "VS", tone: "white", title: "COMPETITIVE\nANALYSIS", vol: "09", phase: "Making meaning", image: "" },
+      title: "Run a competitive analysis",
+      status: "Draft",
+      kind: "Market",
+      oneLine: "What rivals offer, what they say, who they're talking to, and where the client can own something.",
+      keywords: ["competitive", "competitor", "competitors", "competition", "landscape", "category", "rivals", "benchmark", "market"],
+      ask: {
+        plain: "You're being asked to show the room where the client can win. Laying out every competitor is only the start. The five lenses keep it from turning into a feature list.",
+        intake: [
+          "What product or category, and what decision is this for?",
+          "Who's in the set? Get Joe's starting list first.",
+          "Is it for a creative kickoff, a pitch, or a strategy deck?"
+        ],
+        rule: "Agree on the set and the decision with Tierra before you research."
+      },
+      outcome: {
+        summary: "A deck that reads the set through five lenses and ends with ranked openings and one direction.",
+        parts: [
+          ["01 Product truth", "What each product actually gives people, line by line."],
+          ["02 Sameness scan", "Which messages everyone is already saying."],
+          ["03 Hook audit", "Topline, Hook, and Verses for each rival, and where each breaks."],
+          ["04 Audience gaps", "Who's being talked to and who isn't."],
+          ["05 Openings", "Ranked by how open the space is and how well the product backs it."]
+        ],
+        tagRule: "Date every rate, price, and claim. They change.",
+        example: { label: "Example: Vibe FlexLock HELOC competitive analysis", file: "", where: "Vibe Home Base folder in Drive. Client work stays off this site." }
+      },
+      steps: [
+        { title: "Lock the set and the decision", time: "30 min", do: "Start from Joe's list. Three to five rivals that matter, plus a few to scan.", output: "The set", gate: "Tierra approves" },
+        { title: "Collect", time: "2 to 4 days", do: "Product pages, rate pages, social, ads, reviews. Screenshot everything and note the date.", output: "Screenshots and notes", gate: "" },
+        { title: "Run the five lenses", time: "1 to 2 days", do: "One slide or grid per lens. Color the client one way and everyone else another.", output: "Lens slides", gate: "" },
+        { title: "Call the openings", time: "Half a day", do: "Plot them, rank them, and pick a lead.", output: "Openings map plus one direction", gate: "Crit with Tierra" },
+        { title: "Build and file", time: "1 day", do: "Build the deck, check every number, and file it in Home Base and the Library.", output: "Final deck", gate: "Tierra sign-off" }
+      ],
+      startHere: ["Open the Vibe HELOC example.", "Get the competitive set from Joe."],
+      learnFree: ["sfs202", "sfs65", "sfs55", "sfs86", "listening", "trends", "sfs204"],
+      learnPaid: ["adage", "brandwatch", "statista"],
+      templates: [
+        { name: "Competitive Strategy Template (v1)", file: "templates/VH_Lab_Competitive_Strategy_Template.pptx", what: "The first version. A v2 built on the five lenses is coming." }
+      ]
+    },
+
+    {
+      id: "community",
+      cover: { style: "deep", title: "LEARN A\nCOMMUNITY", vol: "03", phase: "Understanding people", image: "" },
+      title: "Learn a community",
+      status: "Coming next",
+      kind: "Culture",
+      oneLine: "Get smart fast on a place or a group: what matters there, who's trusted, and how money and decisions really move.",
+      keywords: ["community", "culture", "cultural", "neighborhood", "detroit", "local", "city", "learn about", "immersion", "market"],
+      ask: { plain: "Coming next. The first one will be Metro Detroit and money: credit unions, trust, and what shapes financial decisions here.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["census", "censusreporter", "d3", "semcog", "outlier", "bridge", "freep", "shed", "fdic"], learnPaid: [], templates: []
+    },
+
+    {
+      id: "workshop",
+      cover: { style: "bars", title: "PLAN A\nWORKSHOP", vol: "13", phase: "In the room", image: "" },
+      title: "Plan a workshop",
+      status: "Coming next",
+      kind: "Room",
+      oneLine: "Design a session that gets a client to a decision: the flow, the artifacts in the room, and the deliverable after.",
+      keywords: ["workshop", "session", "facilitate", "brand exploration", "offsite", "kickoff", "working session"],
+      ask: { plain: "Coming next. The first one will be the Vibe brand exploration.", intake: [], rule: "" },
+      outcome: { summary: "", parts: [], tagRule: "", example: null },
+      steps: [], startHere: [], learnFree: ["designkit"], learnPaid: [], templates: []
+    }
+  ],
+
+  /* ---------------------------------------------------------------
+     RESOURCES.
+     type: "free" (approved, no cost) | "paid"
+     owner: who already has it. "Nobody yet" means ask before buying.
+     --------------------------------------------------------------- */
+  resources: [
+    { id: "census", name: "data.census.gov (American Community Survey)", url: "https://data.census.gov", type: "free", group: "Data", what: "Income, housing, homeownership, age, and household make-up down to the ZIP and tract.", owner: "Free" },
+    { id: "censusreporter", name: "Census Reporter", url: "https://censusreporter.org", type: "free", group: "Data", what: "The same Census data, much faster to read. Start here for a place profile.", owner: "Free" },
+    { id: "pew", name: "Pew Research Center", url: "https://www.pewresearch.org", type: "free", group: "Data", what: "National attitudes and behavior by age, race, income, religion, and tech use.", owner: "Free" },
+    { id: "shed", name: "Federal Reserve SHED survey", url: "https://www.federalreserve.gov/consumerscommunities/shed.htm", type: "free", group: "Data", what: "How households actually handle money: emergency savings, credit, housing.", owner: "Free" },
+    { id: "fdic", name: "FDIC National Survey of Household Use of Banking", url: "https://www.fdic.gov/household-survey", type: "free", group: "Data", what: "Who's banked, underbanked, or unbanked, and why.", owner: "Free" },
+    { id: "d3", name: "Data Driven Detroit", url: "https://datadrivendetroit.org", type: "free", group: "Data", what: "Detroit and Southeast Michigan data and neighborhood profiles.", owner: "Free" },
+    { id: "semcog", name: "SEMCOG", url: "https://semcog.org", type: "free", group: "Data", what: "Southeast Michigan population, jobs, and housing forecasts by community.", owner: "Free" },
+    { id: "outlier", name: "Outlier Media", url: "https://outliermedia.org", type: "free", group: "Local voices", what: "Detroit service journalism on housing, utilities, and money. Real questions from real residents.", owner: "Free" },
+    { id: "bridge", name: "BridgeDetroit", url: "https://www.bridgedetroit.com", type: "free", group: "Local voices", what: "Neighborhood-level Detroit news.", owner: "Free" },
+    { id: "freep", name: "Detroit Free Press", url: "https://www.freep.com", type: "free", group: "Local voices", what: "Metro Detroit news and business. Some articles are paywalled.", owner: "Free (limited)" },
+    { id: "trends", name: "Google Trends", url: "https://trends.google.com", type: "free", group: "Listening", what: "What people search for, where, and when. Good for language and seasonality.", owner: "Free" },
+    { id: "listening", name: "Manual social listening (TikTok, Reddit, YouTube comments)", url: "https://www.reddit.com/r/Detroit/", type: "free", group: "Listening", what: "Where you find verbatims. Search the topic, read the comments, and copy quotes word for word with the date.", owner: "Free" },
+    { id: "nng", name: "Nielsen Norman Group on personas", url: "https://www.nngroup.com/topic/personas/", type: "free", group: "Craft", what: "Solid articles on building personas from research.", owner: "Free" },
+    { id: "designkit", name: "IDEO Design Kit methods", url: "https://www.designkit.org/methods", type: "free", group: "Craft", what: "Field methods for interviews, immersion, and workshops.", owner: "Free" },
+
+    { id: "adage", name: "Ad Age", url: "https://adage.com", type: "paid", group: "Industry and inspiration", what: "Category news, campaigns, and agency moves.", owner: "Tierra (membership)" },
+    { id: "linkedin", name: "LinkedIn Premium", url: "https://www.linkedin.com", type: "paid", group: "Industry and inspiration", what: "Finding people to talk to, company insight, and LinkedIn Learning.", owner: "Tierra" },
+    { id: "perplexity", name: "Perplexity", url: "https://www.perplexity.ai", type: "paid", group: "Tools", what: "Fast sourced desk research. Always click through and check the source.", owner: "Tierra" },
+    { id: "statista", name: "Statista", url: "https://www.statista.com", type: "paid", group: "Data", what: "Quick market stats and charts.", owner: "Nobody yet. Ask Tierra before buying." },
+    { id: "gwi", name: "GWI", url: "https://www.gwi.com", type: "paid", group: "Data", what: "Global audience attitudes and media habits.", owner: "Nobody yet. Ask Tierra before buying." },
+    { id: "mintel", name: "Mintel", url: "https://www.mintel.com", type: "paid", group: "Data", what: "Category reports, including financial services.", owner: "Nobody yet. Ask Tierra before buying." },
+    { id: "mri", name: "MRI-Simmons", url: "https://www.mrisimmons.com", type: "paid", group: "Data", what: "U.S. consumer behavior and media segmentation.", owner: "Nobody yet. Ask Tierra before buying." },
+    { id: "morningconsult", name: "Morning Consult", url: "https://morningconsult.com", type: "paid", group: "Data", what: "Brand tracking and fast consumer polling.", owner: "Nobody yet. Ask Tierra before buying." },
+    { id: "yougov", name: "YouGov Profiles", url: "https://business.yougov.com", type: "paid", group: "Data", what: "Audience profiling by brand, media, and attitudes.", owner: "Nobody yet. Ask Tierra before buying." },
+    { id: "brandwatch", name: "Brandwatch or Sprout Social listening", url: "https://www.brandwatch.com", type: "paid", group: "Listening", what: "Social listening at scale. Usually only worth it for big or ongoing work.", owner: "Nobody yet. Ask Tierra before buying." },
+
+    /* From the Strategy Finishing School data sources cheatsheet. Links checked October 1, 2026; dead links removed, moved links updated. */
+    { id: "sfs1", name: "Census Quick Fact Finder", url: "https://www.census.gov/quickfacts/", type: "free", group: "Data", what: "Pull quick population, income and housing stats for any US state or county.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs2", name: "American Community Survey", url: "https://www.census.gov/programs-surveys/acs/", type: "free", group: "Data", what: "Pull US demographic, income, housing and household data to size and profile audiences.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs7", name: "Consumer Sentiment Poll", url: "https://www.sca.isr.umich.edu/", type: "free", group: "Data", what: "Track monthly US consumer confidence to frame economic mood.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs8", name: "WARC", url: "https://www.warc.com/Welcome", type: "paid", group: "Data", what: "Find ad effectiveness case studies, benchmarks and marketing research.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs9", name: "Savanta", url: "https://savanta.com/", type: "free", group: "Data", what: "Grab free consumer and grocery trackers; commission custom brand research.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs11", name: "CB Insights", url: "https://www.cbinsights.com/", type: "free", group: "Data", what: "Scan startups, funding and emerging market categories in a space.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs12", name: "Deloitte", url: "https://www.deloitte.com/us/en.html", type: "free", group: "Data", what: "Read free industry trend reports and consumer insights from Deloitte Insights.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs14", name: "McKinsey & Company", url: "https://www.mckinsey.com/", type: "free", group: "Data", what: "Read consumer, industry and tech trend reports to frame category context.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs15", name: "Matt Klein", url: "https://kleinkleinklein.com/", type: "free", group: "Data", what: "Read cultural foresight essays on tech and social shifts.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs16", name: "David Mattin", url: "https://dmattin.medium.com/", type: "free", group: "Data", what: "Read big-picture essays on technology, consumer and societal shifts.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs18", name: "VML Intelligence (formerly Wunderman Thompson Intelligence)", url: "https://www.vml.com/expertise/intelligence", type: "free", group: "Data", what: "Scan annual Future 100 and trend reports for emerging consumer shifts.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs19", name: "Influenster", url: "https://www.influenster.com/", type: "free", group: "Listening", what: "Read consumer product reviews to hear how people talk about products.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs21", name: "Relative Insight", url: "https://relativeinsight.com/", type: "paid", group: "Data", what: "Compare language in reviews, social and surveys to find audience differences.", owner: "Nobody yet. Ask Tierra before buying.", region: "UK", src: "sfs" },
+    { id: "sfs22", name: "WGSN", url: "https://www.wgsn.com/en/", type: "paid", group: "Data", what: "Forecast consumer, design, color and product trends across fashion, beauty and food.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs23", name: "Gartner Consumer and Culture Insights", url: "https://www.gartner.com/en/marketing/research/consumer-culture-insights", type: "paid", group: "Data", what: "Get consumer and cultural trend research for marketing leaders.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs27", name: "Bazaarvoice", url: "https://www.bazaarvoice.com/", type: "free", group: "Listening", what: "Pull shopper review and UGC research on ecommerce behavior.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs28", name: "Backslash", url: "https://www.instagram.com/tbwabackslash/?hl=en", type: "free", group: "Data", what: "Follow TBWA's cultural intelligence unit for emerging culture signals.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs29", name: "Canvas8", url: "https://www.canvas8.com/us", type: "paid", group: "Data", what: "Expert analysis of consumer behavior shifts and cultural case studies.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs30", name: "Ahrefs", url: "https://ahrefs.com/", type: "free", group: "Data", what: "Research search demand, keywords and competitor content to spot audience interests.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs31", name: "Accenture", url: "https://www.accenture.com/us-en", type: "free", group: "Data", what: "Read consulting research on consumer, tech and business trends.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs32", name: "Criteo", url: "https://www.criteo.com/", type: "free", group: "Data", what: "Commerce ad platform; mine its free shopper and retail media reports.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs33", name: "Trends by The Hustle", url: "https://trends.co/", type: "paid", group: "Data", what: "Spot emerging business opportunities and consumer markets early.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs35", name: "Crunchbase", url: "https://www.crunchbase.com/", type: "free", group: "Data", what: "Look up company funding, size and competitors.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs36", name: "Springwise", url: "https://www.springwise.com/", type: "free", group: "Data", what: "Scan global innovation examples for inspiration and trend proof points.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs37", name: "Meta for Business", url: "https://www.facebook.com/business", type: "free", group: "Data", what: "Platform ad best practices, case studies and audience reach stats.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs38", name: "Truth Central | McCann Worldgroup", url: "https://www.mccann.com/", type: "free", group: "Data", what: "Find McCann's global cultural truth studies on consumer attitudes.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs41", name: "Wealth-X", url: "https://www.wealthx.com/", type: "paid", group: "Data", what: "Intelligence on ultra-high-net-worth individuals for luxury and affluent targeting.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs43", name: "OECD", url: "https://www.oecd.org/", type: "free", group: "Data", what: "Pull international economic and social data for market context.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs44", name: "Office for National Statistics", url: "https://www.ons.gov.uk/", type: "free", group: "Data", what: "Official UK population, economy and household statistics.", owner: "Free", region: "UK", src: "sfs" },
+    { id: "sfs45", name: "Baymard Institute", url: "https://baymard.com/", type: "free", group: "Data", what: "Research-backed e-commerce UX guidelines and checkout usability benchmarks.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs46", name: "Visual Capitalist", url: "https://www.visualcapitalist.com/", type: "free", group: "Data", what: "Pull clean data visualizations on economic, tech and demographic trends for decks.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs47", name: "Protein Agency", url: "https://proteinagency.com/", type: "free", group: "Data", what: "Read published cultural insight reports from a youth culture agency.", owner: "Free", region: "UK", src: "sfs" },
+    { id: "sfs48", name: "TelmarHelixa", url: "https://telmarhelixa.com/", type: "paid", group: "Data", what: "Audience intelligence and media planning from social and survey data.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs49", name: "Demographics Pro", url: "https://www.demographicspro.com/", type: "paid", group: "Data", what: "Audience demographics behind social accounts, influencers and brand followers.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs50", name: "Business Insider", url: "https://www.businessinsider.com/", type: "free", group: "Data", what: "Track business, tech and media news shaping categories and competitors.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs51", name: "Little Black Book", url: "https://www.lbbonline.com/", type: "free", group: "Data", what: "Browse recent ad work and creative industry news.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs52", name: "Pinterest Business", url: "https://business.pinterest.com/", type: "free", group: "Data", what: "Pinterest ad tools plus free trend data like Pinterest Predicts.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs53", name: "PwC", url: "https://www.pwc.com/us/en.html", type: "free", group: "Data", what: "Free industry surveys and outlooks like holiday retail and CEO surveys.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs54", name: "We Are Social", url: "https://wearesocial.com/", type: "free", group: "Data", what: "Read Think Forward and Digital reports on social culture and platform usage.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs55", name: "SEMRush", url: "https://www.semrush.com/", type: "free", group: "Search and digital", what: "Check search volume and keyword trends for a topic.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs57", name: "Google Ngram", url: "https://books.google.com/ngrams/", type: "free", group: "Search and digital", what: "Track how often a word or phrase appears in books over time.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs58", name: "Google Autofill", url: "https://www.google.com", type: "free", group: "Search and digital", what: "Type brand phrases in incognito to see what people commonly ask.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs60", name: "Keywords Everywhere", url: "https://keywordseverywhere.com/", type: "free", group: "Search and digital", what: "Browser add-on showing search volume and related queries while browsing.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs61", name: "Share-Of-Search", url: "https://www.shareofsearch.net/", type: "free", group: "Search and digital", what: "Methodology for using search share to predict brand market share.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs62", name: "Meta Foresight (Facebook IQ)", url: "https://insights.fb.com/", type: "free", group: "Search and digital", what: "Read Meta's research on consumer, platform and generational behavior.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs63", name: "TNS Digital Life", url: "http://connectedlife.tnsglobal.com/", type: "free", group: "Search and digital", what: "Get regional summaries on digital behavior and online trust.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs65", name: "Similarweb", url: "https://www.similarweb.com/", type: "free", group: "Search and digital", what: "Benchmark competitor website traffic, sources and audience overlap.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs66", name: "FollowerWonk", url: "https://moz.com/followerwonk/", type: "free", group: "Search and digital", what: "Analyze X/Twitter follower bios and audiences around a brand or topic.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs67", name: "Jungle Scout", url: "https://www.junglescout.com/", type: "paid", group: "Search and digital", what: "Estimate Amazon sales and category demand for products.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs68", name: "Display Purposes", url: "https://displaypurposes.com/", type: "free", group: "Listening", what: "Research related Instagram hashtags and how content clusters.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs69", name: "AnswerThePublic", url: "https://answerthepublic.com/", type: "free", group: "Search and digital", what: "See the questions people search about a topic or brand.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs70", name: "Nonfiction Research", url: "https://nonfiction.co/", type: "paid", group: "Search and digital", what: "Commission immersive ethnographic research; browse published reports for unfiltered consumer stories.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs71", name: "eMarketer", url: "https://www.emarketer.com/", type: "paid", group: "Search and digital", what: "Get digital media, ad spend and ecommerce forecasts.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs72", name: "Euromonitor", url: "https://www.euromonitor.com/", type: "paid", group: "Search and digital", what: "Global market sizing, category data and consumer trend reports.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs73", name: "Data.gov", url: "https://www.data.gov/", type: "free", group: "Data", what: "Find open US government datasets on nearly any topic.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs75", name: "SparkToro", url: "https://sparktoro.com/", type: "free", group: "Search and digital", what: "Find what an audience reads, watches, listens to and follows.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs76", name: "Sport England", url: "https://www.sportengland.org/", type: "free", group: "Search and digital", what: "UK sport and physical activity participation data like Active Lives.", owner: "Free", region: "UK", src: "sfs" },
+    { id: "sfs78", name: "Kantar", url: "https://www.kantar.com/", type: "free", group: "Search and digital", what: "Reference brand equity, BrandZ rankings and consumer panel insights.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs79", name: "Only Dead Fish", url: "https://onlydeadfish.co.uk/", type: "free", group: "Search and digital", what: "Read Neil Perkin's thinking on AI, digital and organizational change.", owner: "Free", region: "UK", src: "sfs" },
+    { id: "sfs80", name: "Thinks Insight (formerly BritainThinks)", url: "https://www.thinksinsight.com/", type: "free", group: "Search and digital", what: "UK public opinion and social research reports from a strategy consultancy.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs81", name: "Cassandra", url: "https://cassandra.co/", type: "free", group: "Trends and culture", what: "Daily Gen Z and Millennial trend newsletter and youth research.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs83", name: "Extra Texture", url: "https://www.hubmagazine.com/extratexture/", type: "free", group: "Trends and culture", what: "Skim curated links on consumer and business trends.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs84", name: "The Cool Hunter", url: "https://www.thecoolhunter.net/", type: "free", group: "Trends and culture", what: "Design, architecture and lifestyle inspiration.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs86", name: "JD Power & Associates", url: "https://www.jdpower.com/", type: "free", group: "Trends and culture", what: "Check customer satisfaction rankings in auto, finance, insurance and utilities.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs87", name: "PSFK", url: "https://www.psfk.com/", type: "free", group: "Trends and culture", what: "Find retail and consumer innovation trends.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs88", name: "Report Linker", url: "https://www.reportlinker.com/about/", type: "free", group: "Trends and culture", what: "Search market research and public statistics across thousands of industries.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs89", name: "Sparks & Honey Slideshare", url: "https://www.slideshare.net/sparksandhoney", type: "free", group: "Trends and culture", what: "Cultural trend decks from sparks & honey.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs90", name: "Trend Hunter", url: "https://www.trendhunter.com/", type: "free", group: "Trends and culture", what: "Browse crowdsourced trend examples across fashion, tech, food and design.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs91", name: "Trend Watching", url: "https://www.trendwatching.com/daily", type: "free", group: "Trends and culture", what: "Spot consumer trends with real innovation examples.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs92", name: "Y Pulse", url: "https://www.ypulse.com/", type: "paid", group: "Trends and culture", what: "Gen Z and Millennial behavior, attitudes and brand preference research.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs93", name: "Think with Google", url: "https://business.google.com/en-all/think/", type: "free", group: "Trends and culture", what: "Digital consumer journey insights and search behavior data.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs94", name: "Stylus", url: "https://www.stylus.com/", type: "paid", group: "Trends and culture", what: "Access expert trend reports on consumer behavior, retail and product innovation.", owner: "Nobody yet. Ask Tierra before buying.", region: "UK", src: "sfs" },
+    { id: "sfs95", name: "Pinterest Trends", url: "https://trends.pinterest.com/", type: "free", group: "Trends and culture", what: "See what people are searching on Pinterest by season and demographic.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs96", name: "Exploding Topics", url: "https://explodingtopics.com/", type: "free", group: "Trends and culture", what: "Spot rising search trends and emerging products before they peak.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs97", name: "TrendBible", url: "https://www.trendbible.com/", type: "free", group: "Trends and culture", what: "Forecasts for future of home, interiors, kids and celebrations.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs98", name: "Zukunftsinstitut", url: "https://www.zukunftsinstitut.de/", type: "free", group: "Trends and culture", what: "Explore megatrend frameworks and futures research for long-range strategy.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs99", name: "Pinterest Predicts", url: "https://business.pinterest.com/content/pinterest-predicts/", type: "free", group: "Trends and culture", what: "Read Pinterest's annual forecast of emerging trends.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs101", name: "YouTube Culture & Trends", url: "https://www.youtube.com/trends/", type: "free", group: "Trends and culture", what: "YouTube trend reports, creator culture analysis and annual rankings.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs102", name: "Google Scholar", url: "https://scholar.google.com/", type: "free", group: "Academic and evidence", what: "Find academic papers on consumer behavior, psychology and marketing science.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs103", name: "Journal of Marketing", url: "https://www.ama.org/publications/JournalOfMarketing/Pages/Current-Issue.aspx", type: "paid", group: "Academic and evidence", what: "Read peer-reviewed marketing research.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs104", name: "Journal of Marketing Research", url: "https://www.ama.org/publications/JournalOfMarketingResearch/Pages/current-issue.aspx", type: "paid", group: "Academic and evidence", what: "Peer reviewed academic research on consumer behavior and marketing.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs105", name: "Journal of Advertising", url: "https://www.tandfonline.com/journals/ujoa20", type: "paid", group: "Academic and evidence", what: "Peer-reviewed academic research on advertising effects and theory.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs106", name: "Journal of Advertising Research", url: "https://www.journalofadvertisingresearch.com/", type: "paid", group: "Academic and evidence", what: "Read peer-reviewed advertising effectiveness research, including Byron Sharp's work.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs107", name: "Ehrenberg Bass", url: "https://marketingscience.info/", type: "free", group: "Academic and evidence", what: "Ground strategy in evidence on how brands grow.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs108", name: "IPA", url: "https://ipa.co.uk/knowledge", type: "free", group: "Academic and evidence", what: "Effectiveness case studies and advertising industry reports.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs109", name: "DoSomething", url: "https://www.dosomething.org/", type: "free", group: "Academic and evidence", what: "Window into youth activism and causes Gen Z rallies around.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs110", name: "Hedgehog Review", url: "https://hedgehogreview.com/", type: "free", group: "Academic and evidence", what: "Read deep essays on contemporary culture for cultural context and framing.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs111", name: "ResearchGate", url: "https://www.researchgate.net/", type: "free", group: "Academic and evidence", what: "Find academic papers on consumer behavior and culture.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs113", name: "SurveyMonkey", url: "https://www.surveymonkey.com/", type: "free", group: "Surveys and polling", what: "Quick self-serve surveys and audience panels.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs114", name: "AYTM", url: "https://aytm.com/", type: "paid", group: "Surveys and polling", what: "Run fast self-serve consumer surveys to test ideas or messaging.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs115", name: "Suzy (formerly Crowdtap)", url: "https://www.suzy.com/", type: "paid", group: "Surveys and polling", what: "Run fast consumer surveys and quick-turn research.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs116", name: "Toluna", url: "https://tolunacorporate.com/", type: "paid", group: "Surveys and polling", what: "Run fast self-serve consumer surveys and community research.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs119", name: "Attest", url: "https://www.askattest.com/", type: "paid", group: "Surveys and polling", what: "Field custom consumer surveys to a targeted audience.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs120", name: "Quora", url: "https://www.quora.com/", type: "free", group: "Listening", what: "Read real people's questions and opinions to surface consumer language.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs122", name: "Gallup", url: "https://www.gallup.com/home.aspx", type: "free", group: "Surveys and polling", what: "Reference long-running public opinion and workplace sentiment data.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs123", name: "Harris Poll", url: "https://theharrispoll.com/", type: "free", group: "Surveys and polling", what: "Read public opinion polling on American attitudes.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs125", name: "Ipsos Polls", url: "https://www.ipsos.com/en-us/news-polls", type: "free", group: "Surveys and polling", what: "Free public opinion polls and consumer trend releases.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs126", name: "Kaiser Family Foundation", url: "https://kff.org/", type: "free", group: "Surveys and polling", what: "Pull health policy polling and data for health-related audience work.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs127", name: "Public Agenda", url: "https://www.publicagenda.org/", type: "free", group: "Surveys and polling", what: "Read public opinion research on US social and policy issues.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs128", name: "4A's", url: "https://www.aaaa.org/", type: "paid", group: "Industry and inspiration", what: "Agency industry research, benchmarks and training for 4A's members.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs130", name: "New Strategist", url: "http://www.newstrategist.com/store/index.cfm", type: "paid", group: "Data", what: "Buy demographic and consumer spending reference reports.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs131", name: "Hartman Group", url: "https://www.hartman-group.com/", type: "free", group: "Industry and inspiration", what: "Track food, beverage and wellness culture trends.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs132", name: "Circana (formerly IRI)", url: "https://www.circana.com/", type: "paid", group: "Industry and inspiration", what: "Retail sales, CPG and shopper trend data.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs133", name: "J.D. Power ratings", url: "https://www.jdpower.com/business/ratings-and-awards", type: "free", group: "Industry and inspiration", what: "Customer satisfaction rankings by industry, autos to banking.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs134", name: "Knowledge at Wharton", url: "https://knowledge.wharton.upenn.edu/category/marketing/", type: "free", group: "Industry and inspiration", what: "Read Wharton faculty research and analysis on marketing and consumer behavior.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs137", name: "Nielsen Insights", url: "https://www.nielsen.com/insights/", type: "free", group: "Data", what: "Audience measurement trends, media usage and ad effectiveness reports.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs139", name: "Brand Keys", url: "https://brandkeys.com/white-papers/", type: "free", group: "Industry and inspiration", what: "Download white papers on brand loyalty and engagement measurement.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs141", name: "Brands of the World", url: "http://www.brandsoftheworld.com/", type: "free", group: "Industry and inspiration", what: "Download vector logos for competitive audits and mockups.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs142", name: "Kantar BrandZ", url: "https://www.kantar.com/campaigns/brandz", type: "free", group: "Industry and inspiration", what: "Check rankings of the most valuable global and regional brands.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs143", name: "Open Strategy", url: "https://openstrate.gy/", type: "free", group: "Craft", what: "Find curated strategy and planning tools and resources.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs144", name: "Ranking The Brands", url: "https://www.rankingthebrands.com/", type: "free", group: "Industry and inspiration", what: "Compare brand rankings across many published league tables.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs146", name: "Bridge Ratings Media Research", url: "http://www.bridgeratings.com/", type: "free", group: "Data", what: "Understand radio, streaming and audio media consumption habits.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs147", name: "Click Z", url: "https://clickz.com/", type: "free", group: "Industry and inspiration", what: "Read digital marketing news and stats.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs149", name: "iMedia Connection", url: "http://www.imediaconnection.com/", type: "free", group: "Industry and inspiration", what: "Digital marketing articles and case studies.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs150", name: "IAB", url: "https://www.iab.com/insights/", type: "free", group: "Data", what: "Find digital advertising research on media, commerce, video and measurement.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs152", name: "NCTA", url: "https://www.ncta.com/data-stats", type: "free", group: "Data", what: "US cable and broadband industry statistics.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs153", name: "Emplifi (formerly Socialbakers)", url: "https://emplifi.io/resources/", type: "free", group: "Industry and inspiration", what: "Social media benchmarks and industry reports by region.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs154", name: "TVB", url: "https://www.tvb.org/", type: "free", group: "Data", what: "Get local broadcast TV audience and effectiveness research.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs156", name: "Our World in Data", url: "https://ourworldindata.org/", type: "free", group: "Data", what: "Global charts and data on health, economy, climate and society.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs158", name: "Relevant Facebook groups", url: "", type: "free", group: "Listening", what: "Lurk in interest groups to hear how real people talk about a category.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs159", name: "Public IG hashtag searches", url: "", type: "free", group: "Listening", what: "Search Instagram hashtags to see how people talk about a topic.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs160", name: "TraveltrakAmerica", url: "https://www.omnitrakgroup.com/traveltrakamerica", type: "paid", group: "Data", what: "US traveler profiling and trip behavior data.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs161", name: "TV Tropes", url: "https://tvtropes.org/", type: "free", group: "Craft", what: "Look up storytelling archetypes and tropes for creative development.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs162", name: "Marketing Week", url: "https://www.marketingweek.com/", type: "free", group: "Industry and inspiration", what: "Follow UK marketing news, effectiveness thinking and industry research.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs163", name: "Colossal", url: "https://www.thisiscolossal.com/", type: "free", group: "Industry and inspiration", what: "Find contemporary art and visual culture inspiration.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs164", name: "Talkwalker", url: "https://www.talkwalker.com/", type: "paid", group: "Industry and inspiration", what: "Social listening and media monitoring for brand and culture tracking.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs165", name: "YouTube comments", url: "", type: "free", group: "Listening", what: "Mine comments for unfiltered audience reactions and language.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs166", name: "TikTok comments", url: "", type: "free", group: "Listening", what: "Read comment threads on relevant videos for raw audience language and reactions.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs167", name: "Twitter Lists", url: "https://help.x.com/en/using-x/x-lists", type: "free", group: "Listening", what: "Build curated feeds of accounts to monitor a community.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs168", name: "Pinterest", url: "https://www.pinterest.com/", type: "free", group: "Listening", what: "Browse visual trends and aesthetic references for mood boards.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs169", name: "Civil Eats", url: "https://civileats.com/", type: "free", group: "Industry and inspiration", what: "Food system news on policy, farming and climate.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs171", name: "Edelman Trust Barometer", url: "https://www.edelman.com/trust", type: "free", group: "Industry and inspiration", what: "Use Edelman Trust Barometer data on trust in brands and institutions.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs173", name: "Ofcom", url: "https://www.ofcom.org.uk/", type: "free", group: "Industry and inspiration", what: "UK media use, online behavior and communications market research.", owner: "Free", region: "UK", src: "sfs" },
+    { id: "sfs174", name: "TED Talks", url: "https://www.ted.com/talks", type: "free", group: "Industry and inspiration", what: "Watch expert talks for fresh thinking on culture, behavior and ideas.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs175", name: "Sweathead", url: "https://sweathead.com/", type: "free", group: "Craft", what: "Learn strategy craft through classes, podcast and community.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs176", name: "Cannes Lions", url: "https://www.canneslions.com/", type: "free", group: "Industry and inspiration", what: "Award-winning creative work, talks and trend reports.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs177", name: "Bloomberg visual data", url: "https://www.bloomberg.com/graphics/infographics/", type: "free", group: "Industry and inspiration", what: "Data visualization inspiration and visual business stories.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs178", name: "Cuebiq", url: "https://www.cuebiq.com/", type: "paid", group: "Data", what: "Measure foot traffic and location-based audience behavior for campaigns.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs179", name: "Google Books advanced search", url: "https://books.google.com/advanced_book_search", type: "free", group: "Industry and inspiration", what: "Search inside books for historical and cultural references.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs182", name: "Social Pros Podcast", url: "https://www.convinceandconvert.com/podcasts/", type: "free", group: "Industry and inspiration", what: "Listen to practitioners discuss social media strategy and case studies.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs183", name: "OnePulse", url: "https://www.onepulse.com/", type: "free", group: "Industry and inspiration", what: "Run quick mobile polls for real-time consumer opinion.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs184", name: "BuzzSumo", url: "https://buzzsumo.com/", type: "paid", group: "Industry and inspiration", what: "Find top performing content, topics and influencers by engagement.", owner: "Nobody yet. Ask Tierra before buying.", region: "", src: "sfs" },
+    { id: "sfs185", name: "Hofstede Insights", url: "https://www.hofstede-insights.com/", type: "free", group: "Craft", what: "Compare national culture dimensions across countries.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs186", name: "World Health Organization", url: "https://www.who.int/", type: "free", group: "Data", what: "Pull global health data and fact sheets for health category context.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs187", name: "Moz", url: "https://moz.com/", type: "free", group: "Industry and inspiration", what: "Research keywords and search demand.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs188", name: "User Interviews", url: "https://www.userinterviews.com/", type: "free", group: "Industry and inspiration", what: "Recruit consumers and professionals for interviews and research studies.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs189", name: "Mumsnet", url: "https://www.mumsnet.com/", type: "free", group: "Listening", what: "Read candid UK parent conversations and attitudes.", owner: "Free", region: "UK", src: "sfs" },
+    { id: "sfs190", name: "Amazon product reviews", url: "https://www.amazon.com/gp/help/customer/display.html?nodeId=G3UA5WC5S5UUKB5G", type: "free", group: "Listening", what: "Mine product reviews for customer language, pain points and unmet needs.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs191", name: "HYPEBEAST", url: "https://hypebeast.com/", type: "free", group: "Industry and inspiration", what: "Track streetwear, sneaker and youth culture news.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs192", name: "Memes", url: "", type: "free", group: "Listening", what: "Read memes as a fast signal of shared cultural attitudes.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs193", name: "RiteTag", url: "https://ritetag.com/", type: "free", group: "Listening", what: "Check hashtag engagement and get hashtag suggestions.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs194", name: "Wattpad Brand Insights", url: "https://brands.wattpad.com/insights", type: "free", group: "Listening", what: "Read Gen Z trend reports and storytelling insights from Wattpad's community.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs195", name: "Music Ally", url: "https://musically.com/", type: "free", group: "Industry and inspiration", what: "Follow digital music industry news and trends.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs196", name: "Strategy is your words by Mark Pollard", url: "https://www.markpollard.net/", type: "free", group: "Craft", what: "Strategy writing craft for insights, problems and ideas.", owner: "Free tier", region: "", src: "sfs" },
+    { id: "sfs197", name: "Ad Access (Duke University)", url: "https://repository.duke.edu/dc/adaccess", type: "free", group: "Ad archives", what: "Browse historic US print ads from 1911 to 1955.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs198", name: "Ad*Views (Duke University)", url: "https://repository.duke.edu/dc/adviews", type: "free", group: "Ad archives", what: "Watch archived 1950s to 1980s TV commercials for category history.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs199", name: "Museum of Broadcast Communications", url: "https://museumtv.pastperfectonline.com/", type: "free", group: "Ad archives", what: "Search catalog records of historical broadcast and ad content.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs200", name: "Old Time Radio", url: "https://old-time.com/commercials/", type: "free", group: "Ad archives", what: "Hear 1920s to 1950s radio ads for historic brand references.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs202", name: "Facebook Ad Library", url: "https://www.facebook.com/ads/library/", type: "free", group: "Ad archives", what: "Search competitors' live and past Meta ads to see messaging and creative.", owner: "Free", region: "", src: "sfs" },
+    { id: "sfs203", name: "The Grocer", url: "https://www.thegrocer.co.uk/", type: "free", group: "Industry and inspiration", what: "Follow UK grocery and FMCG industry news.", owner: "Free tier", region: "UK", src: "sfs" },
+    { id: "sfs204", name: "Muse by Clio", url: "https://musebyclios.com/", type: "free", group: "Industry and inspiration", what: "Daily coverage of the best creative advertising work.", owner: "Free", region: "", src: "sfs" }
+  ],
+
+  /* ---------------------------------------------------------------
+     LIBRARY. Every approved template, framework, and example.
+     status: "Approved" | "Draft" | "Example"
+     --------------------------------------------------------------- */
+  library: [
+    { name: "Find the Hook Template", kind: "Template", status: "Draft", file: "templates/VH_Lab_Find_The_Hook_Template.pptx", note: "New. The V+H Topline, Hook, and Verses method." },
+    { name: "Persona Template", kind: "Template", status: "Draft", file: "templates/VH_Lab_Persona_Template.pptx", note: "New. Feedback welcome." },
+    { name: "Persona Source Log", kind: "Template", status: "Draft", file: "templates/VH_Lab_Persona_Source_Log.xlsx", note: "Aggregate, then distill." },
+    { name: "Journey Map Template", kind: "Template", status: "Draft", file: "templates/VH_Lab_Journey_Map_Template.pptx", note: "Slides. Six stages, seven lanes." },
+    { name: "Journey Map Poster", kind: "Template", status: "Draft", file: "templates/VH_Lab_Journey_Map_Poster_Template.pdf", note: "48 by 24 inch wall version for workshops." },
+    { name: "Vibe HELOC Journey Map (The New Owner)", kind: "Example", status: "Example", file: "", note: "Deck and poster in the Vibe Home Base folder in Drive." },
+    { name: "Competitive Strategy Template (v1)", kind: "Template", status: "Draft", file: "templates/VH_Lab_Competitive_Strategy_Template.pptx", note: "v2 on the five lenses is coming." },
+    { name: "Vibe FlexLock HELOC Competitive Analysis", kind: "Example", status: "Example", file: "", note: "In the Vibe Home Base folder in Drive. Client work stays off this site." },
+    { name: "Vibe HELOC Customer Profiles", kind: "Example", status: "Example", file: "", note: "In the Vibe Home Base folder in Drive. Client work stays off this site." }
+  ]
+};
+
+</script>
+  <script>
+(function () {
+  const H = window.HUB;
+  const app = document.getElementById("app");
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  /* keep the last two words together so headlines never end on a lone word */
+  const nowidow = (t) => { const w = String(t).split(" "); return w.length < 3 ? esc(t) : esc(w.slice(0, -2).join(" ")) + " " + esc(w.slice(-2).join("\u00a0")); };
+  const pad = (n) => String(n).padStart(2, "0");
+  const res = (id) => H.resources.find((r) => r.id === id);
+  const statusTag = (s) => `<span class="status ${s === "Ready" || s === "Approved" ? "ready" : ""}">${esc(s)}</span>`;
+  const hasOwner = (o) => !/^free|^nobody/i.test(o || "");
+
+  H.playbooks.sort((a, b) => Number((a.cover || {}).vol || 99) - Number((b.cover || {}).vol || 99));
+  const PHASES = ["Getting the work", "Understanding people", "Making meaning", "In the room", "Proving it"];
+
+  document.getElementById("updated").textContent = `UPDATED ${H.updated.toUpperCase()} BY ${H.editor.toUpperCase()}`;
+
+  /* ---------- matching for the ask box ---------- */
+  function match(q) {
+    const t = q.toLowerCase().trim();
+    if (!t) return [];
+    return H.playbooks
+      .map((p) => {
+        let score = 0;
+        p.keywords.forEach((k) => { if (t.includes(k)) score += k.split(" ").length * 2; });
+        t.split(/\W+/).filter((w) => w.length > 3).forEach((w) => {
+          if (p.title.toLowerCase().includes(w)) score += 1;
+          if (p.oneLine.toLowerCase().includes(w)) score += 0.5;
+        });
+        return { p, score };
+      })
+      .filter((m) => m.score > 0)
+      .sort((a, b) => b.score - a.score);
+  }
+
+  function renderAnswer(q, el) {
+    const m = match(q);
+    if (!q.trim()) { el.innerHTML = ""; return; }
+    if (!m.length) {
+      el.innerHTML = `<div class="match"><div><p class="label">NO PLAYBOOK YET</p><p class="muted">Nothing in the library covers that yet. Bring it to Tierra, and once you've done it, it becomes the next playbook.</p></div></div>`;
+      return;
+    }
+    el.innerHTML = m.slice(0, 3).map(({ p }) => `
+      <div class="match">
+        <div><p class="label">${esc(p.kind)} / ${esc(p.status)}</p><h3>${esc(p.title)}</h3><p class="muted">${esc(p.oneLine)}</p></div>
+        <a class="btn btn-sm" href="#/playbook/${p.id}">OPEN PLAYBOOK</a>
+      </div>`).join("");
+  }
+
+  /* ---------- views ---------- */
+  function home() {
+    const chips = ["Build a persona", "Map the journey", "Run a competitive analysis", "Learn a community", "Plan a workshop"];
+    app.innerHTML = `
+      <div class="wrap">
+        <p class="kicker">The Lab at Verse + Hook</p>
+        <h1>What are you being asked to do?</h1>
+        <p class="lede">Every kind of ask has a playbook here: what it means, what good looks like, the steps and approvals, where to learn, and the template to build in.</p>
+        <div class="ask">
+          <form id="askForm" role="search">
+            <label class="label" for="q" style="position:absolute;left:-9999px">Your ask</label>
+            <input id="q" type="text" placeholder="Example: Tierra needs a persona for Vibe HELOC" autocomplete="off">
+            <button class="btn btn-hook" type="submit">FIND THE PLAYBOOK</button>
+          </form>
+          <div class="chips">${chips.map((c) => `<button class="chip" type="button">${esc(c)}</button>`).join("")}</div>
+          <div class="answer" id="answer" aria-live="polite"></div>
+        </div>
+
+        <section>
+          <p class="kicker">How every playbook works</p>
+          <div class="flow">
+            <div><span class="n">01</span><h3>Get the ask</h3><p>Turn the request into one paragraph and get it approved.</p></div>
+            <div><span class="n">02</span><h3>Aggregate</h3><p>Pull data, verbatims, photos, and observations into one log.</p></div>
+            <div><span class="n">03</span><h3>Distill</h3><p>Find the patterns, tag what's known versus assumed, and crit it.</p></div>
+            <div><span class="n">04</span><h3>Share</h3><p>Build in the template, validate with the client, and file it.</p></div>
+          </div>
+        </section>
+
+        <section class="band">
+          <p class="kicker">Playbooks</p>
+          <h2>Pick up where you are</h2>
+          <div class="albums">${H.playbooks.filter((p) => p.status !== "Coming next").map(card).join("")}${moreCard()}</div>
+        </section>
+      </div>`;
+    const form = document.getElementById("askForm"), q = document.getElementById("q"), ans = document.getElementById("answer");
+    form.addEventListener("submit", (e) => { e.preventDefault(); renderAnswer(q.value, ans); });
+    q.addEventListener("input", () => renderAnswer(q.value, ans));
+    app.querySelectorAll(".chip").forEach((b) => b.addEventListener("click", () => { q.value = b.textContent; renderAnswer(q.value, ans); }));
+  }
+
+  /* ---------- album covers ---------- */
+  function cover(p, big) {
+    const c = p.cover || { style: "crop", title: p.title, vol: "00" };
+    const lines = String(c.title || p.title).toUpperCase().split("\n");
+    const longest = Math.max(...lines.map((l) => l.length));
+    const size = Math.min(15, 84 / (longest * 0.86));
+    const tracks = p.steps && p.steps.length ? `${p.steps.length} TRACKS` : "COMING SOON";
+    let art = "";
+    if (c.style === "crop") art = `<span class="cv-num">${esc(c.vol)}</span>`;
+    if (c.style === "type") { const w = String(c.word || "").toUpperCase(); art = `<span class="cv-word" style="font-size:${Math.min(64, 84 / Math.max(1, w.length * 0.95)).toFixed(1)}cqw">${esc(w)}</span>`; }
+    if (c.style === "quote") art = `<span class="cv-q">\u201C</span>`;
+    if (c.style === "rings") art = `<span class="cv-target"></span><span class="cv-bull"></span>`;
+    if (c.style === "split") art = `<span class="cv-half"></span><span class="cv-ba cv-b">BEFORE</span><span class="cv-ba cv-a">AFTER</span>`;
+    if (c.style === "dots") art = `<span class="cv-pts">${[[12,62],[22,50],[30,56],[41,38],[50,44],[60,30],[69,34],[80,20],[88,24]].map(([x, y], i) => `<i style="left:${x}%;top:${y}%"${i === 7 ? ' class="hi"' : ""}></i>`).join("")}</span>`;
+    if (c.style === "curve") art = `<svg class="cv-curve" viewBox="0 0 100 46" aria-hidden="true"><line x1="0" y1="23" x2="100" y2="23" class="base"/><polyline points="8,34 25,28 42,36 58,17 75,12 92,6"/>${[[8,34],[25,28],[42,36],[58,17],[75,12],[92,6]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="${i===2?3.2:2.4}" class="${i===2?"lo":""}"/>`).join("")}</svg>`;
+    if (c.style === "bars") art = `<span class="cv-eq">${[38, 62, 84, 55, 92, 70, 44, 78, 60, 30, 66, 88].map((h) => `<i style="height:${h}%"></i>`).join("")}</span>`;
+    return `<div class="cover cv-${esc(c.style)} tone-${esc(c.tone || "x")}${big ? " cover-big" : ""}">
+      ${c.image ? `<img class="cv-img" src="${esc(c.image)}" alt="">` : ""}
+      ${art}
+      <span class="cv-top"><span>THE LAB</span><span>VOL. ${esc(c.vol)}</span></span>
+      <span class="cv-title" style="font-size:${size.toFixed(2)}cqw">${lines.map(esc).join("<br>")}</span>
+      <span class="cv-foot"><span>${esc(p.kind.toUpperCase())}</span><span>${tracks}</span></span>
+      <span class="cv-sticker">${esc(p.status.toUpperCase())}</span>
+    </div>`;
+  }
+
+  function moreCard() {
+    const soon = H.playbooks.filter((p) => p.status === "Coming next").length;
+    return soon ? `<a class="album" href="#/playbooks" aria-label="See all playbooks">
+      <div class="sleeve"><div class="cover cv-more"><span class="cv-more-n">+${soon}</span><span class="cv-top"><span>THE LAB</span><span>COMING NEXT</span></span><span class="cv-foot"><span>THE FULL TRACKLIST</span><span>→</span></span></div></div>
+      <div class="album-meta"><h3>See every album</h3><p>${soon} more playbooks on the way.</p></div></a>` : "";
+  }
+
+  function card(p) {
+    return `<a class="album" href="#/playbook/${p.id}" aria-label="${esc(p.title)}">
+      <div class="sleeve"><span class="disc" aria-hidden="true"></span>${cover(p)}</div>
+      <div class="album-meta">
+        <h3>${nowidow(p.title)}</h3>
+        <p>${esc(p.oneLine)}</p>
+      </div>
+    </a>`;
+  }
+
+  function playbooks() {
+    const n = H.playbooks.length, live = H.playbooks.filter((p) => p.status !== "Coming next").length;
+    app.innerHTML = `<div class="wrap"><p class="kicker">Playbooks</p><h1>Every kind of ask</h1>
+      <p class="lede">${n} albums, in the order an engagement runs. ${live} are ready or in draft. Ready means it's been tested on real work. Draft means use it and tell Tierra what broke. Coming next means it's on the way.</p>
+      ${PHASES.map((ph, i) => {
+        const list = H.playbooks.filter((p) => (p.cover || {}).phase === ph);
+        return list.length ? `<section class="phase"><p class="kicker">SIDE ${String.fromCharCode(65 + i)} / ${esc(ph.toUpperCase())}</p><div class="albums">${list.map(card).join("")}</div></section>` : "";
+      }).join("")}
+    </div>`;
+  }
+
+  function resourceRows(list) {
+    return list.map((r) => `<tr data-q="${esc((r.name + " " + r.what + " " + r.group).toLowerCase())}">
+      <td>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : `<strong>${esc(r.name)}</strong>`}${r.region ? ` <span class="status">${esc(r.region)}</span>` : ""}</td>
+      <td>${esc(r.what)}</td>
+      <td class="own ${hasOwner(r.owner) ? "has" : ""}">${esc(r.owner)}</td>
+    </tr>`).join("");
+  }
+  function resourceTable(list) {
+    if (!list.length) return `<p class="muted">None listed yet.</p>`;
+    return `<div class="scroll"><table class="table"><thead><tr><th>Resource</th><th>Use it for</th><th>Who has it</th></tr></thead><tbody>${resourceRows(list)}</tbody></table></div>`;
+  }
+
+  function playbook(id) {
+    const p = H.playbooks.find((x) => x.id === id);
+    if (!p) return notFound();
+    const coming = p.status === "Coming next";
+    const free = p.learnFree.map(res).filter(Boolean), paid = p.learnPaid.map(res).filter(Boolean);
+    const toc = coming ? [] : [["ask", "THE ASK"], ["outcome", "WHAT GOOD LOOKS LIKE"], ["steps", "THE STEPS"], ["start", "START HERE"], ["learn", "LEARN MORE"], ["templates", "TEMPLATES"]];
+    app.innerHTML = `<div class="wrap">
+      <p class="kicker"><a href="#/playbooks">Playbooks</a> / ${esc(p.kind)}</p>
+      <div class="pb-hero">
+        <div class="pb-cover">${cover(p, true)}</div>
+        <div><div class="row" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><h1>${nowidow(p.title)}</h1>${statusTag(p.status)}</div>
+        <p class="lede">${esc(p.oneLine)}</p></div>
+      </div>
+      <div class="pb" style="margin-top:32px">
+        <nav class="toc" aria-label="On this page">${toc.map(([a, l], i) => `<a href="#/playbook/${p.id}/${a}">${pad(i + 1)} ${l}</a>`).join("")}</nav>
+        <div>
+          <div class="block" id="ask"><p class="kicker">01</p><h2>What you're being asked to do</h2><p>${esc(p.ask.plain)}</p>
+            ${p.ask.intake.length ? `<p class="label" style="margin-top:20px">Answer these first</p><ol class="qlist">${p.ask.intake.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>` : ""}
+            ${p.ask.rule ? `<div class="rule">${esc(p.ask.rule)}</div>` : ""}
+          </div>
+          ${coming ? (free.length ? `<div class="block"><p class="kicker">In the meantime</p><h2>Places to start</h2>${resourceTable(free)}</div>` : "") : `
+          <div class="block" id="outcome"><p class="kicker">02</p><h2>What good looks like</h2><p>${esc(p.outcome.summary)}</p>
+            <div class="parts">${p.outcome.parts.map(([h, d]) => `<div><p class="label">${esc(h)}</p><p>${esc(d)}</p></div>`).join("")}</div>
+            ${p.outcome.tagRule ? `<div class="rule">${esc(p.outcome.tagRule)}</div>` : ""}
+            ${p.outcome.example ? `<div class="example"><span class="label">${esc(p.outcome.example.label)}</span>${p.outcome.example.file ? `<a class="btn btn-sm btn-ghost" href="${esc(p.outcome.example.file)}" download>DOWNLOAD</a>` : `<span class="muted">${esc(p.outcome.example.where || "")}</span>`}</div>` : ""}
+          </div>
+          <div class="block" id="steps"><p class="kicker">03</p><h2>The steps</h2>
+            <ol class="steps">${p.steps.map((s, i) => `<li class="step">
+              <span class="n">${pad(i + 1)}</span>
+              <div><h3>${esc(s.title)}</h3><p>${esc(s.do)}</p></div>
+              <div class="meta"><span class="out">${esc(s.time)}</span><span class="out">OUTPUT: ${esc(s.output)}</span>${s.gate ? `<span class="gate">${esc(s.gate)}</span>` : ""}</div>
+            </li>`).join("")}</ol>
+          </div>
+          <div class="block" id="start"><p class="kicker">04</p><h2>Start here</h2><ul class="checks">${p.startHere.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>
+          <div class="block" id="learn"><p class="kicker">05</p><h2>Learn more</h2>
+            <p class="label" style="margin-top:8px">Approved and free</p>${resourceTable(free)}
+            <p class="label" style="margin-top:32px">Paid. Check who already has it before you buy anything.</p>${resourceTable(paid)}
+          </div>
+          <div class="block" id="templates"><p class="kicker">06</p><h2>Templates</h2>
+            ${p.templates.map((t) => `<div class="match"><div><h3>${esc(t.name)}</h3><p class="muted">${esc(t.what)}</p></div><a class="btn btn-sm" href="${esc(t.file)}" download>DOWNLOAD</a></div>`).join("")}
+          </div>`}
+        </div>
+      </div></div>`;
+  }
+
+  function resources(filter) {
+    const f = filter || "all";
+    const list = H.resources.filter((r) => f === "all" || r.type === f);
+    const order = ["Data", "Local voices", "Listening", "Search and digital", "Trends and culture", "Surveys and polling", "Academic and evidence", "Ad archives", "Industry", "Industry and inspiration", "Craft", "Tools"];
+    const rank = (g) => { const i = order.indexOf(g); return i < 0 ? 99 : i; };
+    const groups = [...new Set(list.map((r) => r.group))].sort((a, b) => rank(a) - rank(b));
+    app.innerHTML = `<div class="wrap"><p class="kicker">Resources</p><h1>Where to learn</h1>
+      <p class="lede">${H.resources.length} sources. Free ones are approved to use any time. For paid ones, check "Who has it" first. If it says nobody yet, ask Tierra before buying. Free tier means you can do a lot without paying, but the full version costs money.</p>
+      <div class="res-tools">
+        <div class="tabs" role="tablist">
+          ${[["all", "ALL"], ["free", "APPROVED + FREE"], ["paid", "PAID"]].map(([k, l]) => `<button class="tab" role="tab" aria-selected="${f === k}" data-f="${k}">${l}</button>`).join("")}
+        </div>
+        <input id="rq" class="res-search" type="search" placeholder="Search: polls, Gen Z, search data, Detroit" aria-label="Search resources">
+      </div>
+      <nav class="res-jump" aria-label="Jump to group">${groups.map((g) => `<a href="#/resources/${f}" data-g="${esc(g)}">${esc(g.toUpperCase())}</a>`).join("")}</nav>
+      ${groups.map((g) => `<section class="res-group" data-group="${esc(g)}" style="margin-top:40px;padding:0"><p class="kicker">${esc(g)}</p>${resourceTable(list.filter((r) => r.group === g))}</section>`).join("")}
+      <p class="muted" id="rnone" style="display:none;margin-top:32px">Nothing matches. Try a broader word.</p>
+    </div>`;
+    app.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => { go(`#/resources/${b.dataset.f}`); }));
+    app.querySelectorAll(".res-jump a").forEach((a) => a.addEventListener("click", (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const sec = app.querySelector(`.res-group[data-group="${a.dataset.g}"]`); if (sec) sec.scrollIntoView({ behavior: "smooth" });
+    }));
+    const rq = document.getElementById("rq");
+    rq.addEventListener("input", () => {
+      const t = rq.value.toLowerCase().trim(); let shown = 0;
+      app.querySelectorAll(".res-group").forEach((sec) => {
+        let n = 0;
+        sec.querySelectorAll("tbody tr").forEach((tr) => { const ok = !t || tr.dataset.q.includes(t); tr.style.display = ok ? "" : "none"; if (ok) n++; });
+        sec.style.display = n ? "" : "none"; shown += n;
+      });
+      document.getElementById("rnone").style.display = shown ? "none" : "";
+    });
+  }
+
+  function library() {
+    app.innerHTML = `<div class="wrap"><p class="kicker">Library</p><h1>Every template and example</h1>
+      <p class="lede">Templates are V+H-branded and work in PowerPoint, Keynote, and Google Slides. Client examples stay in Drive.</p>
+      <div class="scroll"><table class="table"><thead><tr><th>Item</th><th>Kind</th><th>Status</th><th>Notes</th><th></th></tr></thead><tbody>
+      ${H.library.map((l) => `<tr><td><strong>${esc(l.name)}</strong></td><td>${esc(l.kind)}</td><td>${statusTag(l.status)}</td><td>${esc(l.note)}</td>
+        <td>${l.file ? `<a class="btn btn-sm" href="${esc(l.file)}" download>DOWNLOAD</a>` : ""}</td></tr>`).join("")}
+      </tbody></table></div></div>`;
+  }
+
+  function team() {
+    app.innerHTML = `<div class="wrap"><p class="kicker">Team</p><h1>Who to ask</h1>
+      <div class="grid">${H.team.map((t) => `<div class="person"><h3>${esc(t.name)}</h3><p class="label" style="margin-top:6px">${esc(t.role)}</p><p>${esc(t.askMe)}</p>${t.contact ? `<p class="muted">${esc(t.contact)}</p>` : ""}</div>`).join("")}</div>
+    </div>`;
+  }
+
+  function notFound() {
+    app.innerHTML = `<div class="wrap"><h1>Not here yet</h1><p class="lede"><a href="#/">Back to start</a></p></div>`;
+  }
+
+  /* ---------- router ---------- */
+  /* ---------- router ----------
+     Links are handled in JS so they work everywhere, including
+     previews and embedded frames that block normal link navigation. */
+  let current = location.hash || "#/";
+
+  function route() {
+    const parts = current.replace(/^#\/?/, "").split("/");
+    const r = parts[0] || "home";
+    document.querySelectorAll(".nav a").forEach((a) => {
+      const on = a.dataset.route === r || (r === "playbook" && a.dataset.route === "playbooks");
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    if (r === "home") home();
+    else if (r === "playbooks") playbooks();
+    else if (r === "playbook") {
+      playbook(parts[1]);
+      if (parts[2]) { const el = document.getElementById(parts[2]); if (el) { el.scrollIntoView({ behavior: "smooth" }); return; } }
+    }
+    else if (r === "resources") resources(parts[1]);
+    else if (r === "library") library();
+    else if (r === "team") team();
+    else notFound();
+    try { window.scrollTo(0, 0); } catch (e) {}
+  }
+
+  function go(path) {
+    current = path;
+    try { if (location.hash !== path) history.pushState(null, "", path); } catch (e) {}
+    route();
+  }
+
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    e.preventDefault();
+    go(a.getAttribute("href"));
+  });
+  window.addEventListener("popstate", () => { current = location.hash || "#/"; route(); });
+  window.addEventListener("hashchange", () => { if (location.hash !== current) { current = location.hash || "#/"; route(); } });
+  route();
+})();
+
+</script>
+</body>
+</html>
